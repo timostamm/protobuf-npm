@@ -42,6 +42,9 @@ export type ProtocAsset = {
   executable: string;
 };
 
+/**
+ * Write assets.json.
+ */
 export function writeAssets(assets: ProtocAsset[], rootDir: string): void {
   writeFileSync(
     join(rootDir, "assets.json"),
@@ -49,6 +52,9 @@ export function writeAssets(assets: ProtocAsset[], rootDir: string): void {
   );
 }
 
+/**
+ * Read assets.json.
+ */
 export function readAssets(rootDir: string): ProtocAsset[] {
   const text = readFileSync(join(rootDir, "assets.json"), "utf-8");
   return JSON.parse(text) as ProtocAsset[];

@@ -4,6 +4,10 @@ import { join, dirname } from "node:path";
 import { readAssets } from "./lib/assets";
 import { spawnSync } from "node:child_process";
 
+/*
+This script is a shim for `protoc`. It reads assets.json to find a binary for the current
+platform and architecture, and executes it, delegating arguments and std io.
+*/
 const rootDir = __dirname.endsWith("src") ? dirname(__dirname) : __dirname;
 const assets = readAssets(rootDir);
 const asset = assets.find(

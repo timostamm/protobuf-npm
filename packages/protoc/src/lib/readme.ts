@@ -2,6 +2,9 @@ import type { GithubRelease } from "./github";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+/**
+ * Update the upstream release version in README.md.
+ */
 export function updateReadme(release: GithubRelease, rootDir: string): void {
   const path = join(rootDir, "README.md");
   writeFileSync(
