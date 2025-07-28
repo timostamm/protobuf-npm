@@ -1,0 +1,7 @@
+{
+  "root": false,
+  "extends": "//",
+  "files": {
+    "includes": ["**", "!protoc.cjs", "!assets.json", "!package.json"]
+  }
+}

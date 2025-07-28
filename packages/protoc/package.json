@@ -1,0 +1,42 @@
+{
+  "name": "@protobuf-ts/protoc",
+  "version": "29.2.0",
+  "description": "Installs the protocol buffer compiler \"protoc\" for you.",
+  "bin": {
+    "protoc": "protoc.cjs"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "npm run build:protoc.js && npm run build:tsc",
+    "build:protoc.js": "esbuild src/protoc.ts --bundle --platform=node --outfile=protoc.cjs",
+    "build:tsc": "tsc --noEmit",
+    "lint": "biome lint",
+    "format": "biome format --write",
+    "update-check": "tsx src/update-check.ts",
+    "update": "tsx src/update.ts"
+  },
+  "type": "commonjs",
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "Apache-2.0",
+  "author": "Timo Stamm <ts@timostamm.com>",
+  "homepage": "https://github.com/timostamm/protoc",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timostamm/protoc",
+    "directory": "packages/protoc"
+  },
+  "keywords": [
+    "Protocol Buffers",
+    "protobuf",
+    "protoc",
+    "installation"
+  ],
+  "devDependencies": {
+    "tsx": "^4.20.3",
+    "fflate": "^0.8.2"
+  }
+}

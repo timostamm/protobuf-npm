@@ -1,0 +1,24 @@
+{
+  "name": "root",
+  "private": true,
+  "config": {
+    "protocVersion": "29.2"
+  },
+  "scripts": {
+    "clean": "git clean -Xdf",
+    "all": "npm run format && npm run build && npm run lint",
+    "build": "npm run -ws --if-present build",
+    "lint": "biome lint && npm run -ws --if-present lint",
+    "format": "biome format --write && npm run -ws --if-present format"
+  },
+  "workspaces": [
+    "packages/protoc"
+  ],
+  "devDependencies": {
+    "@biomejs/biome": "^2.1.2",
+    "@types/node": "^24.1.0",
+    "esbuild": "^0.25.8",
+    "typescript": "^5.8.3"
+  },
+  "license": "Apache-2.0"
+}
