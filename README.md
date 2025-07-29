@@ -9,6 +9,6 @@ TODO
 ## protoc
 
 ```shell script
-npm install @protobuf-ts/protoc
+npm install --save-dev protoc
 npx protoc --version 
 ```
