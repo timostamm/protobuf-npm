@@ -4,3 +4,11 @@ TODO
 - [ ] automate releases for new upstream versions
 - [x] support RC releases
 - [ ] add the conformance runner binary
+
+
+## protoc
+
+```shell script
+npm install @protobuf-ts/protoc
+npx protoc --version 
+```
