@@ -109,7 +109,7 @@ export function protocAssets(assets: GithubReleaseAsset[]): ProtocAsset[] {
     //     dotExe: true,
     // },
   };
-  const re = /protoc-\d+.\d+-([a-z0-9_-]+).zip/;
+  const re = /protoc-\d+.\d+(?:-rc-?\d)?-([a-z0-9_-]+).zip/;
   const filtered: ProtocAsset[] = [];
   for (const asset of assets) {
     if (asset.content_type !== "application/zip") {

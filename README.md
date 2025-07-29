@@ -2,5 +2,5 @@ This project provides unofficial npm packages for https://github.com/protocolbuf
 
 TODO
 - [ ] automate releases for new upstream versions
-- [ ] support RC releases
+- [x] support RC releases
 - [ ] add the conformance runner binary

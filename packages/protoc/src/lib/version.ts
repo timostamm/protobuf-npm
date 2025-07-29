@@ -11,18 +11,27 @@ export function createPackageVersion(
   release: GithubRelease,
   currentVersion: string,
 ): string {
-  const tagNameMatch = release.tag_name.match(/v(\d+)\.(\d+)/);
+  const tagNameRe = /^v(\d+)\.(\d+)(?:-(rc\d))?$/;
+  const tagNameMatch = release.tag_name.match(tagNameRe);
   if (!tagNameMatch) {
     throw new Error(
-      `Unexpected tag_name "${release.tag_name}" for GitHub release "${release.name}"`,
+      `Unexpected tag_name "${release.tag_name}" for GitHub ${release.prerelease ? "prerelease" : "release"} "${release.name}"`,
     );
   }
-  const [, major, minor] = tagNameMatch;
-  const currentVersionMatch = currentVersion.match(/\d+\.\d+\.(\d+)/);
+  const [, major, minor, prerelease] = tagNameMatch;
+  if (release.prerelease !== !!prerelease) {
+    throw new Error(
+      `Unexpected tag_name "${release.tag_name}" for GitHub ${release.prerelease ? "prerelease" : "release"} "${release.name}"`,
+    );
+  }
+  const currentVersionMatch = currentVersion.match(/^\d+\.\d+\.(\d+)/);
   if (!currentVersionMatch) {
     throw new Error(`Unexpected currentVersion "${currentVersion}"`);
   }
   const patch = currentVersionMatch[1];
+  if (release.prerelease) {
+    return `${major}.${minor}.${patch}-${prerelease}`;
+  }
   return `${major}.${minor}.${patch}`;
 }
 
@@ -181,5 +190,5 @@ function updatePackageDep(
 }
 
 function writeJson(path: string, json: unknown) {
-  writeFileSync(path, `${JSON.stringify(json, null, 2)}\n\n`);
+  writeFileSync(path, `${JSON.stringify(json, null, 2)}\n`);
 }
