@@ -6,7 +6,7 @@ import {
   extractInclude,
   protocAssets,
   writeAssets,
-} from "./lib/assets";
+} from "./lib/protoc-assets";
 import { updateReadme } from "./lib/readme";
 import {
   readPackageJson,

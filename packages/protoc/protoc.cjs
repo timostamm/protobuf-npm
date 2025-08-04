@@ -4,7 +4,7 @@
 // src/protoc.ts
 var import_node_path2 = require("node:path");
 
-// src/lib/assets.ts
+// src/lib/protoc-assets.ts
 var import_node_path = require("node:path");
 var import_node_fs = require("node:fs");
 function readAssets(rootDir2) {

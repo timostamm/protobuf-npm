@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { join, dirname } from "node:path";
-import { readAssets } from "./lib/assets";
+import { readAssets } from "./lib/protoc-assets";
 import { spawnSync } from "node:child_process";
 
 /*
