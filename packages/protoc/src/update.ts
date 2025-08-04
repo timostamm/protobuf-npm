@@ -51,12 +51,10 @@ async function main(args: string[]): Promise<void> {
   const [lock, lockPath] = readNearestLockfile(rootDir);
 
   // fetch release
-  const version =
-    args[0] === "current" ? pkg.upstreamVersion.substring(1) : args[0];
   const release = await fetchGithubRelease(
     "protocolbuffers",
     "protobuf",
-    version,
+    args[0] === "current" ? pkg.upstreamVersion : args[0],
   );
   const assets = protocAssets(release.assets);
   console.log(

@@ -48,7 +48,7 @@ export async function listGithubReleases(owner: string, repo: string) {
 /**
  * Fetch release info from GitHub.
  *
- * Version without a leading "v", or "latest".
+ * Version, with or without a leading "v", or "latest".
  */
 export async function fetchGithubRelease(
   owner: string,
@@ -60,6 +60,9 @@ export async function fetchGithubRelease(
     //"Authorization": `Bearer ${x}`,
     "X-GitHub-Api-Version": "2022-11-28",
   });
+  if (version !== "latest" && version.startsWith("v")) {
+    version = version.slice(1);
+  }
   const url =
     version === "latest"
       ? `https://api.github.com/repos/${owner}/${repo}/releases/latest`
