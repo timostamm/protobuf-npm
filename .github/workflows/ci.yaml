@@ -20,11 +20,6 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ci/all/${{ github.sha }}
-          restore-keys: ci/all
       - run: npm ci
       - run: npm run all
       - run: node scripts/gh-diffcheck.js
