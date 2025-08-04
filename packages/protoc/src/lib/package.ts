@@ -22,7 +22,7 @@ export function updatePackageVersions(
   pkg.upstreamVersion = release.tag_name;
   // Update references in lock-file
   if (lock) {
-    findLockPackage(lock, "@protobuf-ts/protoc").version = pkg.version;
+    findLockPackage(lock, pkg.name).version = pkg.version;
     for (const lockPkg of Object.values(lock.packages)) {
       updatePackageDep(lockPkg, pkg.name, pkg.version);
     }

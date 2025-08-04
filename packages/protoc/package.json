@@ -1,5 +1,5 @@
 {
-  "name": "@protobuf-ts/protoc",
+  "name": "protoc",
   "version": "29.2.0",
   "upstreamVersion": "v29.2",
   "description": "Installs the protocol buffer compiler \"protoc\" for you.",
