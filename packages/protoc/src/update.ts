@@ -9,12 +9,14 @@ import {
 } from "./lib/assets";
 import { updateReadme } from "./lib/readme";
 import {
-  readPackageVersion,
-  createPackageVersion,
-  updatePackageVersion,
-} from "./lib/version";
+  readPackageJson,
+  readNearestLockfile,
+  updatePackageVersions,
+  writePackageJson,
+  writeLockFile,
+} from "./lib/package";
 
-const usage = `USAGE: update.ts 31.1|latest
+const usage = `USAGE: update.ts 31.1|latest|current
 
 This script looks up a release of https://github.com/protocolbuffers/protobuf,
 and downloads release assets.
@@ -45,9 +47,11 @@ async function main(args: string[]): Promise<void> {
     console.error(usage);
     process.exit(1);
   }
+  const pkg = readPackageJson(rootDir);
+  const [lock, lockPath] = readNearestLockfile(rootDir);
 
   // fetch release
-  const version = args[0];
+  const version = args[0] === "current" ? pkg.upstreamVersion.substring(1) : args[0];
   const release = await fetchGithubRelease(
     "protocolbuffers",
     "protobuf",
@@ -81,9 +85,10 @@ async function main(args: string[]): Promise<void> {
   writeAssets(assets, rootDir);
 
   // update package.json and others
-  const pkgVersion = createPackageVersion(release, readPackageVersion(rootDir));
-  console.log(`Update package version to ${pkgVersion}...`);
-  updatePackageVersion(pkgVersion, rootDir);
+  updatePackageVersions(release, pkg, lock);
+  console.log(`Update package version to ${pkg.version}...`);
+  writePackageJson(rootDir, pkg);
+  writeLockFile(lock, lockPath);
   updateReadme(release, rootDir);
 
   console.log("Done");

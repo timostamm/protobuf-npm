@@ -2,12 +2,39 @@ import type { GithubRelease } from "./github";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 
+type PackageJson = {
+  name: string;
+  version: string;
+  upstreamVersion: string;
+};
+
+/**
+ * Update the version in package.json, and the references in the
+ * nearest package-lock.json.
+ */
+export function updatePackageVersions(
+  release: GithubRelease,
+  pkg: PackageJson,
+  lock?: Lockfile,
+): void {
+  // Update version in package
+  pkg.version = createPackageVersion(release, pkg.version);
+  pkg.upstreamVersion = release.tag_name;
+  // Update references in lock-file
+  if (lock) {
+    findLockPackage(lock, "@protobuf-ts/protoc").version = pkg.version;
+    for (const lockPkg of Object.values(lock.packages)) {
+      updatePackageDep(lockPkg, pkg.name, pkg.version);
+    }
+  }
+}
+
 /**
  * Create a package version like 31.1.0 from:
  * - The major and minor version an upstream release, e.g., `31.1` from `v31.1`.
  * - The patch version of current package version, e.g., `2` from `30.0.2`.
  */
-export function createPackageVersion(
+function createPackageVersion(
   release: GithubRelease,
   currentVersion: string,
 ): string {
@@ -36,44 +63,22 @@ export function createPackageVersion(
 }
 
 /**
- * Reads the version from package.json.
- */
-export function readPackageVersion(rootDir: string): string {
-  const packagePath = join(rootDir, "package.json");
-  const pkg = readPackageJson(packagePath);
-  return pkg.version;
-}
-
-/**
- * Update the version in package.json, and the references in the
- * nearest package-lock.json.
- */
-export function updatePackageVersion(version: string, rootDir: string): void {
-  // Update version in package
-  const packagePath = join(rootDir, "package.json");
-  const pkg = readPackageJson(packagePath);
-  pkg.version = version;
-  writeJson(packagePath, pkg);
-
-  // Update references in lock-file
-  const [lock, lockPath] = findNearestLockfile(rootDir);
-  findLockPackage(lock, "@protobuf-ts/protoc").version = version;
-  for (const lockPkg of Object.values(lock.packages)) {
-    updatePackageDep(lockPkg, pkg.name, version);
-  }
-  writeJson(lockPath, lock);
-}
-
-type PackageJson = {
-  name: string;
-  version: string;
-};
-
-/**
  * Reads a package.json file.
  */
-function readPackageJson(path: string): PackageJson {
-  return JSON.parse(readFileSync(path, "utf-8")) as PackageJson;
+export function readPackageJson(rootDir: string): PackageJson {
+  const path = join(rootDir, "package.json");
+  const pkg = JSON.parse(readFileSync(path, "utf-8"));
+  if ("upstreamVersion" in pkg && typeof pkg.upstreamVersion === "string") {
+    return pkg as PackageJson;
+  }
+  throw new Error(`Missing upstreamVersion in package.json`);
+}
+
+/**
+ * Write package.json file to rootDir.
+ */
+export function writePackageJson(rootDir: string, pkg: PackageJson): void {
+  writeJson(join(rootDir, "package.json"), pkg);
 }
 
 type Lockfile = {
@@ -89,7 +94,7 @@ type LockPackage = {
   optionalDependencies?: Record<string, string>;
 };
 
-function findNearestLockfile(rootPath: string): [Lockfile, string] {
+export function readNearestLockfile(rootPath: string): [Lockfile, string] {
   const name = "package-lock.json";
   let path = join(rootPath, name);
   while (!existsSync(path)) {
@@ -116,6 +121,13 @@ function readLockfile(path: string): Lockfile {
     throw new Error(`Missing "packages" in ${path}`);
   }
   return lock;
+}
+
+/**
+ * Write package-lock.json file.
+ */
+export function writeLockFile(lock: Lockfile, path: string): void {
+  writeJson(path, lock);
 }
 
 /**

@@ -17,6 +17,34 @@ export type GithubReleaseAsset = {
   browser_download_url: string; // e.g. https://github.com/protocolbuffers/protobuf/releases/download/v31.1/protoc-31.1-linux-aarch_64.zip
 };
 
+export async function listGithubReleases(owner: string, repo: string) {
+  const headers = new Headers({
+    Accept: "application/vnd.github+json",
+    //"Authorization": `Bearer ${x}`,
+    "X-GitHub-Api-Version": "2022-11-28",
+  });
+  const results: GithubRelease[] = [];
+  for (let page = 1; ; page++) {
+    const url = `https://api.github.com/repos/${owner}/${repo}/releases?per_page=30&page=${page}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers,
+    });
+    if (response.status !== 200) {
+      throw new Error(
+        `Unexpected status code: ${response.status} for GET ${url}`,
+      );
+    }
+    const items = (await response.json()) as GithubRelease[];
+    results.push(...items);
+    const link = response.headers.get("link") ?? "";
+    if (!link.includes(`; rel="next"`)) {
+      break;
+    }
+  }
+  return results;
+}
+
 /**
  * Fetch release info from GitHub.
  *

@@ -1,6 +1,6 @@
 import { dirname } from "node:path";
 import { fetchGithubRelease } from "./lib/github";
-import { createPackageVersion, readPackageVersion } from "./lib/version";
+import { readPackageJson, updatePackageVersions } from "./lib/package";
 
 const usage = `USAGE: update-check.ts
 
@@ -23,8 +23,10 @@ async function main(args: string[]): Promise<void> {
     "protobuf",
     "latest",
   );
-  const gotVersion = readPackageVersion(rootDir);
-  const wantVersion = createPackageVersion(release, gotVersion);
+  const pkg = readPackageJson(rootDir);
+  const gotVersion = pkg.version;
+  updatePackageVersions(release, pkg);
+  const wantVersion = pkg.version;
   if (wantVersion === gotVersion) {
     console.log(
       `Latest GitHub release ${release.name} (${release.tag_name}) matches current version ${gotVersion}.`,
