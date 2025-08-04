@@ -24,10 +24,10 @@
   },
   "license": "Apache-2.0",
   "author": "Timo Stamm <ts@timostamm.com>",
-  "homepage": "https://github.com/timostamm/protoc",
+  "homepage": "https://github.com/timostamm/protobuf-npm",
   "repository": {
     "type": "git",
-    "url": "https://github.com/timostamm/protoc",
+    "url": "https://github.com/timostamm/protobuf-npm",
     "directory": "packages/protoc"
   },
   "keywords": [
