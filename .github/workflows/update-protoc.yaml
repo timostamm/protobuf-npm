@@ -24,4 +24,5 @@ jobs:
       - uses: actions/checkout@v4
       - run: npm ci
       - run: npx update-protoc ${{ inputs.version }}
-      # TODO open PR, but only if changes
+      - run: echo "test=hello" >> "$GITHUB_OUTPUT"
+      # TODO open PR

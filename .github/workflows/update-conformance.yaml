@@ -17,13 +17,6 @@ env:
 
 jobs:
 
-  test:
-    runs-on: ubuntu-latest
-    if: ${{ inputs.version }}
-    steps:
-      - name: Print the input version to STDOUT
-        run: echo ${{ inputs.version }}
-
   build-conformance-linux-x64:
     runs-on: ubuntu-latest
     if: ${{ inputs.version }}
