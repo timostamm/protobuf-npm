@@ -5,10 +5,10 @@ TODO
   - [x] check for new version
   - [x] open PR with changes
   - [ ] on PR merge: create GH release
-  - [ ] on PR merge: publish to npmjs.com
-    - use different dist tag (e.g. "next") for pre-release versions
-  - [ ] support RCs
-- [x] support RC releases
+  - [ ] on tag: publish to npmjs.com
+    - [x] use different dist tag (e.g. "next") for pre-release versions
+- [ ] support RCs when checking for new versions
+- [x] support RCs when updating
 - [x] add the conformance runner binary
 
 

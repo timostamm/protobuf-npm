@@ -1,0 +1,28 @@
+name: publish-protoc
+on:
+  # TODO create tag on PR merge
+  # TODO publish package on tag create
+  pull_request:
+    types: [closed]
+    branches:
+      - "update-protoc-**"
+permissions: read-all
+jobs:
+  publish-protoc:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          registry-url: 'https://registry.npmjs.org'
+      - id: check
+        run: |
+          npm ci
+          npx checkversion protoc >> "$GITHUB_OUTPUT"
+      # TODO
+      # https://docs.github.com/en/actions/tutorials/publish-packages/publish-nodejs-packages#publishing-packages-to-the-npm-registry
+      - run: npm publish   --dry-run    --workspace packages/protoc --tag ${{steps.check.outputs.package_dist_tag}}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
