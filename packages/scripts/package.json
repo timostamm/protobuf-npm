@@ -7,7 +7,6 @@
     "update-conformance": "src/update-conformance.ts",
     "build-conformance": "src/build-conformance.bash",
     "checkversion": "src/checkversion.ts",
-    "checklatest": "src/checklatest.ts",
     "diffcheck": "src/diffcheck.ts"
   },
   "scripts": {

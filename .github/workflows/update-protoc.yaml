@@ -33,4 +33,5 @@ jobs:
           title: Update protoc to ${{ inputs.version }}
           body: |
             Update the package `protoc` to the upstream release [${{ inputs.version }}](https://github.com/protocolbuffers/protobuf/releases/tag/${{ inputs.version }}).
-            Merging this PR will publish ${{ steps.checkversion.outputs.package_version }} of this package.
+            
+            Merging this PR will publish version ${{ steps.checkversion.outputs.package_version }} of this package.

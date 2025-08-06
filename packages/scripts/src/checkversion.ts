@@ -42,9 +42,12 @@ async function main(args: string[]): Promise<void> {
     "protobuf",
     "latest",
   );
-  const package_upstream_is_latest = latestRelease.tag_name === pkg.upstreamVersion;
+  const package_upstream_is_latest =
+    latestRelease.tag_name === pkg.upstreamVersion;
   console.log(`package_version=${pkg.version}`);
   console.log(`package_upstream_version=${pkg.upstreamVersion}`);
   console.log(`latest_upstream_version=${latestRelease.tag_name}`);
-  console.log(`package_upstream_is_latest=${package_upstream_is_latest ? "1" : ""}`);
+  console.log(
+    `package_upstream_is_latest=${package_upstream_is_latest ? "1" : ""}`,
+  );
 }
