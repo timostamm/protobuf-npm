@@ -22,8 +22,8 @@ export async function listGithubReleases(owner: string, repo: string) {
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
   });
-  if (process.env.GH_TOKEN) {
-    headers.set("Authorization", `Bearer ${process.env.GH_TOKEN}`);
+  if (process.env.GITHUB_TOKEN) {
+    headers.set("Authorization", `Bearer ${process.env.GITHUB_TOKEN}`);
   }
   const results: GithubRelease[] = [];
   for (let page = 1; ; page++) {
@@ -61,8 +61,8 @@ export async function fetchGithubRelease(
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
   });
-  if (process.env.GH_TOKEN) {
-    headers.set("Authorization", `Bearer ${process.env.GH_TOKEN}`);
+  if (process.env.GITHUB_TOKEN) {
+    headers.set("Authorization", `Bearer ${process.env.GITHUB_TOKEN}`);
   }
   if (version !== "latest" && version.startsWith("v")) {
     version = version.slice(1);

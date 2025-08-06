@@ -3,19 +3,13 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "15 4,5 * * *"   # <=== Change this value
-
-# Prevent writing to the repository using the CI token.
-# Ref: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
 permissions:
   actions: write
-
 env:
   # https://consoledonottrack.com/
   DO_NOT_TRACK: 1
-  GH_TOKEN: ${{ github.token }}
-
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
-
   checklatest-protoc:
     runs-on: ubuntu-latest
     steps:
@@ -25,7 +19,6 @@ jobs:
         run: npx checklatest protoc >> "$GITHUB_OUTPUT"
       - if: ${{ steps.check.outputs.latest }}
         run: gh workflow run update-protoc.yaml -f version=${{steps.check.outputs.latest}}
-
   checklatest-conformance:
     runs-on: ubuntu-latest
     steps:
