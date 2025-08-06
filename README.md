@@ -6,6 +6,7 @@ TODO
   - [x] open PR with changes
   - [ ] on PR merge: create GH release
   - [ ] on tag: publish to npmjs.com
+    - [ ] test publish 
     - [x] use different dist tag (e.g. "next") for pre-release versions
 - [ ] support RCs when checking for new versions
 - [x] support RCs when updating
