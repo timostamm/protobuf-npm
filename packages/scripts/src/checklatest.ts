@@ -1,22 +1,8 @@
 #!/usr/bin/env tsx
 
 import { join } from "node:path";
-import { rmSync } from "node:fs";
 import { fetchGithubRelease } from "./lib/github";
-import {
-  extractExecutable,
-  extractInclude,
-  protocAssets,
-  writeAssets,
-} from "./lib/protoc-assets";
-import { updateReadme } from "./lib/readme";
-import {
-  PackageJson,
-  readLockfile,
-  readPackageJson,
-  updatePackageVersions,
-  writeJson,
-} from "./lib/package";
+import { type PackageJson, readPackageJson } from "./lib/package";
 import { findRootDir } from "./lib/root";
 
 const usage = `USAGE: checklatest.ts protoc|conformance
@@ -57,5 +43,4 @@ async function main(args: string[]): Promise<void> {
   if (latestRelease.tag_name !== pkg.upstreamVersion) {
     console.log(`latest=${latestRelease.tag_name}`);
   }
-
 }

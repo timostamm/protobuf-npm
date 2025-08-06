@@ -1,4 +1,4 @@
-name: update-protoc
+name: checklatest
 on:
   workflow_dispatch:
   schedule:
