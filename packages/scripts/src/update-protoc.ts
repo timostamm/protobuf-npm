@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 
-import { join } from "node:path";
+import { join, normalize } from "node:path";
 import { rmSync } from "node:fs";
 import { fetchGithubRelease } from "./lib/github";
 import {
@@ -48,11 +48,10 @@ async function main(args: string[]): Promise<void> {
     console.error(usage);
     process.exit(1);
   }
-  const rootDir = findRootDir();
-  const pkgDir = join(rootDir, "packages/protoc");
+  const pkgDir = join(findRootDir(), "packages/protoc");
   const pkgPath = join(pkgDir, "package.json");
+  const lockPath = normalize(join(pkgDir, "../../package-lock.json"));
   const pkg = readPackageJson(pkgPath);
-  const lockPath = join(rootDir, "package-lock.json");
   const lock = readLockfile(lockPath);
 
   // fetch release

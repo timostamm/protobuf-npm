@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 
-import { basename, dirname, join } from "node:path";
+import { basename, dirname, join, normalize } from "node:path";
 import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { type Unzipped, unzipSync } from "fflate";
 import { fetchGithubRelease } from "./lib/github";
@@ -29,11 +29,10 @@ async function main(args: string[]): Promise<void> {
     console.error(usage);
     process.exit(1);
   }
-  const rootDir = findRootDir();
-  const pkgDir = join(rootDir, "packages/protobuf-conformance");
+  const pkgDir = join(findRootDir(), "packages/protobuf-conformance");
   const pkgPath = join(pkgDir, "package.json");
   const pkg = readPackageJson(pkgPath);
-  const lockPath = join(rootDir, "package-lock.json");
+  const lockPath = normalize(join(pkgDir, "../../package-lock.json"));
   const lock = readLockfile(lockPath);
 
   // fetch release and unzip in memory
