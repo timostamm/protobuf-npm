@@ -6,10 +6,13 @@ on:
         description: 'Upstream version, e.g. v29.2'
         required: true
         type: string
+#  workflow_run:
+#    workflows: [checklatest]
+#    types: [completed]
 
 # Prevent writing to the repository using the CI token.
 # Ref: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
-permissions: read-all
+#permissions: read-all
 
 env:
   # https://consoledonottrack.com/

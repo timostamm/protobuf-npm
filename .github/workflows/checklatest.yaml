@@ -6,7 +6,7 @@ on:
 
 # Prevent writing to the repository using the CI token.
 # Ref: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
-permissions: read-all
+#permissions: read-all
 
 env:
   # https://consoledonottrack.com/
