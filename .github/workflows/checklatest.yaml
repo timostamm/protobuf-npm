@@ -16,7 +16,6 @@ jobs:
 
   checklatest-protoc:
     runs-on: ubuntu-latest
-    if: ${{ inputs.version }}
     steps:
       - uses: actions/checkout@v4
       - run: npm ci
@@ -27,7 +26,6 @@ jobs:
 
   checklatest-conformance:
     runs-on: ubuntu-latest
-    if: ${{ inputs.version }}
     steps:
       - uses: actions/checkout@v4
       - run: npm ci
