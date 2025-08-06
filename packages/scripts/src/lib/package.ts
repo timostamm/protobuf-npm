@@ -1,7 +1,7 @@
 import type { GithubRelease } from "./github";
 import { readFileSync, writeFileSync } from "node:fs";
 
-type PackageJson = {
+export type PackageJson = {
   name: string;
   version: string;
   upstreamVersion: string;

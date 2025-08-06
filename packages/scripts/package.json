@@ -6,6 +6,7 @@
     "update-protoc": "src/update-protoc.ts",
     "update-conformance": "src/update-conformance.ts",
     "build-conformance": "src/build-conformance.bash",
+    "checklatest": "src/checklatest.ts",
     "diffcheck": "src/diffcheck.ts"
   },
   "scripts": {
