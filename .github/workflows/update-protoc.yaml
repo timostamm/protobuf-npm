@@ -22,11 +22,15 @@ jobs:
       - uses: actions/checkout@v4
       - run: npm ci
       - run: npx update-protoc ${{ inputs.version }}
+      - id: checkversion
+        run: npx checkversion protoc >> "$GITHUB_OUTPUT"
       - uses: peter-evans/create-pull-request@v7
         with:
           base: main
-          branch: update-protoc-${{ inputs.version }}
+          branch: update-protoc-${{ steps.checkversion.outputs.package_version }}
           delete-branch: true
           commit-message: Update protoc to ${{ inputs.version }}
           title: Update protoc to ${{ inputs.version }}
-          body: This updates the package `protoc` to the upstream release [${{ inputs.version }}](https://github.com/protocolbuffers/protobuf/releases/tag/${{ inputs.version }}).
+          body: |
+            Update the package `protoc` to the upstream release [${{ inputs.version }}](https://github.com/protocolbuffers/protobuf/releases/tag/${{ inputs.version }}).
+            Merging this PR will publish ${{ steps.checkversion.outputs.package_version }} of this package.
