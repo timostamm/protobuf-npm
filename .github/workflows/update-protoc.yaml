@@ -23,6 +23,12 @@ jobs:
           npm ci
           npx update-protoc ${{inputs.version}}
           npx checkversion protoc >> "$GITHUB_OUTPUT"
+
+      # TODO
+      - id: TEST
+        run: |
+          echo "foo" > foo.txt
+
       - uses: peter-evans/create-pull-request@v7
         with:
           base: main
