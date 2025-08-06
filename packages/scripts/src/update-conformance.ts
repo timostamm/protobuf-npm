@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 
-import { basename, dirname, join, normalize } from "node:path";
+import { basename, dirname, join, normalize, matchesGlob } from "node:path";
 import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { type Unzipped, unzipSync } from "fflate";
 import { fetchGithubRelease } from "./lib/github";
@@ -84,29 +84,28 @@ function writeTmp(tmpDir: string, unzipped: Unzipped): void {
 }
 
 function writeInclude(includeDir: string, unzipped: Unzipped): void {
+  // glob patterns to target directory in include dir
+  const mapping = {
+    "conformance/conformance.proto": "conformance/",
+    "editions/golden/test_messages*.proto": "google/protobuf/",
+    "conformance/test_protos/test_messages*.proto": "google/protobuf/",
+    "src/google/protobuf/test_messages*.proto": "google/protobuf/",
+  } satisfies Record<string, string>;
   rmSync(includeDir, { recursive: true, force: true });
   let filesWritten = 0;
   for (const [pathWithRoot, content] of Object.entries(unzipped)) {
     const path = pathWithRoot.split("/").slice(1).join("/");
     let target: string;
-    if (/^conformance\/conformance\.proto$/.test(path)) {
-      target = join(includeDir, "conformance", basename(path));
-    } else if (
-      /^conformance\/test_protos\/test_messages.*\.proto$/.test(path)
-    ) {
-      target = join(includeDir, "google/protobuf", basename(path));
-    } else if (/^editions\/golden\/test_messages.*\.proto$/.test(path)) {
-      target = join(includeDir, "google/protobuf", basename(path));
-    } else if (/^src\/google\/protobuf\/test_messages.*\.proto$/.test(path)) {
-      target = join(includeDir, "google/protobuf", basename(path));
-    } else {
-      continue;
+    for (const [pattern, targetDir] of Object.entries(mapping)) {
+      if (matchesGlob(path, pattern)) {
+        target = join(includeDir, targetDir, basename(path));
+        if (!existsSync(dirname(target))) {
+          mkdirSync(dirname(target), { recursive: true });
+        }
+        writeFileSync(target, content);
+        filesWritten++;
+      }
     }
-    if (!existsSync(dirname(target))) {
-      mkdirSync(dirname(target), { recursive: true });
-    }
-    writeFileSync(target, content);
-    filesWritten++;
   }
   console.log(`Unzipped ${filesWritten} files to include`);
 }
