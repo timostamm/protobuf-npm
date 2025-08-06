@@ -17,12 +17,12 @@ jobs:
         with:
           node-version-file: .nvmrc
           registry-url: 'https://registry.npmjs.org'
-      - id: check
+      - id: checkversion
         run: |
           npm ci
           npx checkversion conformance >> "$GITHUB_OUTPUT"
       # TODO
       # https://docs.github.com/en/actions/tutorials/publish-packages/publish-nodejs-packages#publishing-packages-to-the-npm-registry
-      - run: npm publish   --dry-run    --workspace packages/protobuf-conformance --tag ${{steps.check.outputs.package_dist_tag}}
+      - run: npm publish   --dry-run    --workspace packages/protobuf-conformance --tag ${{steps.checkversion.outputs.package_dist_tag}}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
