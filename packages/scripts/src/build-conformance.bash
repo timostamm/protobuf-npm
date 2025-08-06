@@ -7,5 +7,5 @@ mv bazelisk-linux-amd64 "${GITHUB_WORKSPACE}/bin/bazel"
 chmod +x "${GITHUB_WORKSPACE}/bin/bazel"
 
 # Build Binary
-cd .tmp
+cd packages/protobuf-conformance/.tmp
 USE_BAZEL_VERSION=7.1.2 BAZEL_CXXOPTS="-std=c++17" bazel build conformance:conformance_test_runner

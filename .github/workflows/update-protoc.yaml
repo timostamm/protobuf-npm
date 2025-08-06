@@ -27,5 +27,6 @@ jobs:
       - uses: actions/checkout@v4
       - run: npm ci
       - run: npx update-protoc ${{ inputs.version }}
-      - run: echo "test=hello" >> "$GITHUB_OUTPUT"
       # TODO open PR
+      - run: echo "test=hello" >> "$GITHUB_OUTPUT"
+      - run: npx diffcheck
