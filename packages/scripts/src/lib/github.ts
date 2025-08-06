@@ -20,9 +20,11 @@ export type GithubReleaseAsset = {
 export async function listGithubReleases(owner: string, repo: string) {
   const headers = new Headers({
     Accept: "application/vnd.github+json",
-    //"Authorization": `Bearer ${x}`,
     "X-GitHub-Api-Version": "2022-11-28",
   });
+  if (process.env.GH_TOKEN) {
+    headers.set("Authorization", `Bearer ${process.env.GH_TOKEN}`);
+  }
   const results: GithubRelease[] = [];
   for (let page = 1; ; page++) {
     const url = `https://api.github.com/repos/${owner}/${repo}/releases?per_page=30&page=${page}`;
@@ -57,9 +59,11 @@ export async function fetchGithubRelease(
 ) {
   const headers = new Headers({
     Accept: "application/vnd.github+json",
-    //"Authorization": `Bearer ${x}`,
     "X-GitHub-Api-Version": "2022-11-28",
   });
+  if (process.env.GH_TOKEN) {
+    headers.set("Authorization", `Bearer ${process.env.GH_TOKEN}`);
+  }
   if (version !== "latest" && version.startsWith("v")) {
     version = version.slice(1);
   }
