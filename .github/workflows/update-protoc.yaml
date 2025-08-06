@@ -19,5 +19,11 @@ jobs:
       - uses: actions/checkout@v4
       - run: npm ci
       - run: npx update-protoc ${{ inputs.version }}
-      - run: gh pr create --fill-first
-
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: Update protoc to ${{ inputs.version }}
+          title: Update protoc to ${{ inputs.version }}
+          body: This updates the package protoc to the upstream release ${{ inputs.version }}
+          branch: update-protoc-${{ inputs.version }}
+          delete-branch: true
+          base: main
