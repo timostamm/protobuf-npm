@@ -63,6 +63,16 @@ jobs:
           path: packages/protobuf-conformance/conformance_test_runner-linux-x64
       - run: chmod +x packages/protobuf-conformance/conformance_test_runner-linux-x64
       - run: npm ci
-      # TODO open PR
       - run: npx update-conformance ${{inputs.version}}
-      - run: npx diffcheck
+      - id: checkversion
+        run: npx checkversion protoc >> "$GITHUB_OUTPUT"
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          base: main
+          branch: update-conformance-${{ steps.checkversion.outputs.package_version }}
+          delete-branch: true
+          commit-message: Update protobuf-conformance to ${{ inputs.version }}
+          title: Update protobuf-conformance to ${{ inputs.version }}
+          body: |
+            Update the package `protobuf-conformance` to the upstream release [${{ inputs.version }}](https://github.com/protocolbuffers/protobuf/releases/tag/${{ inputs.version }}).
+            Merging this PR will publish version ${{ steps.checkversion.outputs.package_version }} of this package.
