@@ -24,9 +24,9 @@ jobs:
       - run: npx update-protoc ${{ inputs.version }}
       - uses: peter-evans/create-pull-request@v7
         with:
-          commit-message: Update protoc to ${{ inputs.version }}
-          title: Update protoc to ${{ inputs.version }}
-          body: This updates the package protoc to the upstream release ${{ inputs.version }}
+          base: main
           branch: update-protoc-${{ inputs.version }}
           delete-branch: true
-          base: main
+          commit-message: Update protoc to ${{ inputs.version }}
+          title: Update protoc to ${{ inputs.version }}
+          body: This updates the package `protoc` to the upstream release [${{ inputs.version }}](https://github.com/protocolbuffers/protobuf/releases/tag/${{ inputs.version }}).

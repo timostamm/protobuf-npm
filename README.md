@@ -2,6 +2,10 @@ This project provides unofficial npm packages for https://github.com/protocolbuf
 
 TODO
 - [ ] automate releases for new upstream versions
+  - [x] check for new version
+  - [x] open PR with changes
+  - [ ] create GH release and publish to npmjs.com on PR merge
+  - [ ] support RCs
 - [x] support RC releases
 - [x] add the conformance runner binary
 
