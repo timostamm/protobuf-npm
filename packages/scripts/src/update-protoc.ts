@@ -9,7 +9,7 @@ import {
   protocAssets,
   writeAssets,
 } from "./lib/protoc-assets";
-import { updateReadme2 } from "./lib/readme";
+import { updateReadme } from "./lib/readme";
 import {
   readLockfile,
   readPackageJson,
@@ -93,7 +93,7 @@ async function main(args: string[]): Promise<void> {
   console.log(`Update package version to ${pkg.version}...`);
   writeJson(pkgPath, pkg);
   writeJson(lockPath, lock);
-  updateReadme2(join(pkgDir, "README.md"), release);
+  updateReadme(join(pkgDir, "README.md"), release);
 
   console.log("Done");
 }

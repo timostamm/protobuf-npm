@@ -1,6 +1,5 @@
 import type { GithubRelease } from "./github";
 import { readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
 
 type PackageJson = {
   name: string;
@@ -20,10 +19,10 @@ export function readPackageJson(path: string): PackageJson {
 }
 
 /**
- * Write package.json file to rootDir.
+ * Write a JSON file.
  */
-export function writePackageJson(rootDir: string, pkg: PackageJson): void {
-  writeJson(join(rootDir, "package.json"), pkg);
+export function writeJson(path: string, json: unknown) {
+  writeFileSync(path, `${JSON.stringify(json, null, 2)}\n`);
 }
 
 /**
@@ -111,13 +110,6 @@ export function readLockfile(path: string): Lockfile {
 }
 
 /**
- * Write package-lock.json file.
- */
-export function writeLockFile(lock: Lockfile, path: string): void {
-  writeJson(path, lock);
-}
-
-/**
  * Locates an entry for a local workspace package in a lock file.
  * Throws an error if not found.
  */
@@ -186,8 +178,4 @@ function updatePackageDep(
     });
   }
   return log;
-}
-
-export function writeJson(path: string, json: unknown) {
-  writeFileSync(path, `${JSON.stringify(json, null, 2)}\n`);
 }

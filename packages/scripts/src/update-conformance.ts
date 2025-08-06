@@ -8,9 +8,8 @@ import {
   readLockfile,
   readPackageJson,
   updatePackageVersions,
-  writePackageJson,
+  writeJson,
 } from "./lib/package";
-import { writeLockFile } from "./lib/package";
 import { updateReadme } from "./lib/readme";
 import { findRootDir } from "./lib/root";
 
@@ -64,9 +63,9 @@ async function main(args: string[]): Promise<void> {
   // update package.json and others
   updatePackageVersions(release, pkg, lock);
   console.log(`Update package version to ${pkg.version}...`);
-  writePackageJson(rootDir, pkg);
-  writeLockFile(lock, lockPath);
-  updateReadme(release, rootDir);
+  writeJson(pkgPath, pkg);
+  writeJson(lockPath, lock);
+  updateReadme(join(pkgDir, "README.md"), release);
   console.log("Done");
 }
 
