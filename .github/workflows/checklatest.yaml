@@ -23,7 +23,7 @@ jobs:
       - id: check
         run: npx checklatest protoc >> "$GITHUB_OUTPUT"
       - if: ${{ steps.check.outputs.latest }}
-        run: gh workflow run update-protoc.yml -f version=${{steps.check.outputs.latest}}
+        run: gh workflow run update-protoc.yaml -f version=${{steps.check.outputs.latest}}
 
   checklatest-conformance:
     runs-on: ubuntu-latest
@@ -33,4 +33,4 @@ jobs:
       - id: check
         run: npx checklatest conformance >> "$GITHUB_OUTPUT"
       - if: ${{ steps.check.outputs.latest }}
-        run: gh workflow run update-conformance.yml -f version=${{steps.check.outputs.latest}}
+        run: gh workflow run update-conformance.yaml -f version=${{steps.check.outputs.latest}}
