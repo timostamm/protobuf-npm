@@ -14,17 +14,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci
-      - id: check
-        run: npx checkversion protoc >> "$GITHUB_OUTPUT"
-      - if: ${{ steps.check.outputs.package_upstream_is_latest }}
-        run: gh workflow run update-protoc.yaml -f version=${{steps.check.outputs.latest_upstream_version}}
+      - id: checkversion
+        run: |
+          npm ci
+          npx checkversion protoc >> "$GITHUB_OUTPUT"
+      - if: ${{ steps.checkversion.outputs.package_upstream_is_latest }}
+        run: gh workflow run update-protoc.yaml -f version=${{steps.checkversion.outputs.latest_upstream_version}}
   checklatest-conformance:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci
-      - id: check
-        run: npx checkversion conformance >> "$GITHUB_OUTPUT"
-      - if: ${{ steps.check.outputs.package_upstream_is_latest }}
-        run: gh workflow run update-conformance.yaml -f version=${{steps.check.outputs.latest_upstream_version}}
+      - id: checkversion
+        run: |
+          npm ci
+          npx checkversion conformance >> "$GITHUB_OUTPUT"
+      - if: ${{ steps.checkversion.outputs.package_upstream_is_latest }}
+        run: gh workflow run update-conformance.yaml -f version=${{steps.checkversion.outputs.latest_upstream_version}}

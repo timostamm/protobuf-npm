@@ -20,10 +20,11 @@ jobs:
     if: ${{ inputs.version }}
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci
-      - run: npx update-protoc ${{ inputs.version }}
       - id: checkversion
-        run: npx checkversion protoc >> "$GITHUB_OUTPUT"
+        run: |
+          npm ci
+          npx update-protoc ${{inputs.version}}
+          npx checkversion protoc >> "$GITHUB_OUTPUT"
       - uses: peter-evans/create-pull-request@v7
         with:
           base: main
