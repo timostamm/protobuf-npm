@@ -14,6 +14,7 @@ permissions: read-all
 env:
   # https://consoledonottrack.com/
   DO_NOT_TRACK: 1
+  GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}
 
 jobs:
 
@@ -37,8 +38,6 @@ jobs:
   build-conformance-darwin-x64:
     runs-on: macos-13
     if: ${{ inputs.version }}
-    env:
-      GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -49,8 +48,8 @@ jobs:
           path: ~/.cache/bazel
           key: ${{ runner.os }}-bazel-cache
       - run: npm ci
-      - run: npm run -w packages/protobuf-conformance update ${{inputs.version}}
-      - run: npm run -w packages/protobuf-conformance build-upstream
+      - run: npx update-conformance ${{ inputs.version }}
+      - run: npx build-conformance
       - uses: actions/upload-artifact@v4
         with:
           name: conformance_test_runner-darwin-x64
