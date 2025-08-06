@@ -9,6 +9,7 @@ const usage = `USAGE: checkversion.ts protoc|conformance
 
 Outputs:
 - package_version: Version from the local package.json.
+- package_dist_tag: npm dist-tag for the local package version. E.g. "latest" for 29.2.1, and "next" for 30.2.1-rc.1. 
 - package_upstream_version: Upstream version of the local package.
 - latest_upstream_version: Latest upstream version.
 - package_upstream_is_latest: "1" if package_upstream_version equals latest_upstream_version. 
@@ -42,12 +43,18 @@ async function main(args: string[]): Promise<void> {
     "protobuf",
     "latest",
   );
-  const package_upstream_is_latest =
-    latestRelease.tag_name === pkg.upstreamVersion;
-  console.log(`package_version=${pkg.version}`);
-  console.log(`package_upstream_version=${pkg.upstreamVersion}`);
-  console.log(`latest_upstream_version=${latestRelease.tag_name}`);
-  console.log(
-    `package_upstream_is_latest=${package_upstream_is_latest ? "1" : ""}`,
-  );
+  const packageVersionPrerelease = pkg.version.match(
+    /^\d+\.\d+\.\d+(-.+)?$/,
+  )?.[1];
+  // biome-ignore format: Don't break lines for readability
+  const vars = {
+    package_version: pkg.version,
+    package_dist_tag: packageVersionPrerelease !== undefined ? "next" : "latest",
+    package_upstream_version: pkg.upstreamVersion,
+    latest_upstream_version: latestRelease.tag_name,
+    package_upstream_is_latest: latestRelease.tag_name === pkg.upstreamVersion ? "1" : "",
+  } satisfies Record<string, string>;
+  for (const [key, val] of Object.entries(vars)) {
+    console.log(`${key}=${val}`);
+  }
 }
