@@ -22,7 +22,7 @@ jobs:
       - id: check
         run: npx checklatest protoc >> "$GITHUB_OUTPUT"
       - run: echo "TODO run workflow to update protoc ${steps.check.outputs.latest}"
-        if: ${{ steps.check.outputs.latest }}
+        if: steps.check.outputs.latest
 
   checklatest-conformance:
     runs-on: ubuntu-latest
