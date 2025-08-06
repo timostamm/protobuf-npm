@@ -1,0 +1,21 @@
+{
+  "name": "scripts",
+  "version": "0.0.1",
+  "private": true,
+  "bin": {
+    "update-protoc": "src/update-protoc.ts",
+    "update-conformance": "src/update-conformance.ts",
+    "build-conformance": "src/build-conformance.bash",
+    "diffcheck": "src/diffcheck.ts"
+  },
+  "scripts": {
+    "build:tsc": "tsc --noEmit",
+    "lint": "biome lint",
+    "format": "biome format --write"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "tsx": "^4.20.3",
+    "fflate": "^0.8.2"
+  }
+}

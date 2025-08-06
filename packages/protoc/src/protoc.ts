@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 
 import { join, dirname } from "node:path";
-import { readAssets } from "./lib/protoc-assets";
 import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 
 /*
 This script is a shim for `protoc`. It reads assets.json to find a binary for the current
 platform and architecture, and executes it, delegating arguments and std io.
 */
 const rootDir = __dirname.endsWith("src") ? dirname(__dirname) : __dirname;
-const assets = readAssets(rootDir);
+const assets = JSON.parse(
+  readFileSync(join(rootDir, "assets.json"), "utf-8"),
+) as { arch: string; platform: string; executable: string }[];
 const asset = assets.find(
   (asset) => asset.arch === process.arch && asset.platform === process.platform,
 );

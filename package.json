@@ -12,7 +12,9 @@
     "format": "biome format --write && npm run -ws --if-present format"
   },
   "workspaces": [
-    "packages/protoc"
+    "packages/protoc",
+    "packages/protobuf-conformance",
+    "packages/scripts"
   ],
   "devDependencies": {
     "@biomejs/biome": "^2.1.2",

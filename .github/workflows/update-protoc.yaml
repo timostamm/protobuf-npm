@@ -1,0 +1,27 @@
+name: update
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Upstream version, e.g. v29.2'
+        required: true
+        type: string
+
+# Prevent writing to the repository using the CI token.
+# Ref: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
+permissions: read-all
+
+env:
+  # https://consoledonottrack.com/
+  DO_NOT_TRACK: 1
+
+jobs:
+
+  update-protoc:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npx update-protoc ${{ inputs.version }}
+      # TODO open PR, but only if changes
