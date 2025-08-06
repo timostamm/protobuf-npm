@@ -17,6 +17,7 @@ on:
 env:
   # https://consoledonottrack.com/
   DO_NOT_TRACK: 1
+  GH_TOKEN: ${{ github.token }}
 
 jobs:
 
