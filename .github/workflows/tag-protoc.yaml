@@ -20,7 +20,7 @@ jobs:
           npm ci
           npx checkversion protoc >> "$GITHUB_OUTPUT"
       - run: |
-          gh release create ‘protoc/v${{steps.checkversion.outputs.package_version}}‘ \
+          gh release create 'protoc/v${{steps.checkversion.outputs.package_version}}' \
             --title 'protoc v${{steps.checkversion.outputs.package_version}}' \
             --notes 'Upstream release: [${{steps.checkversion.outputs.package_upstream_version}}](https://github.com/protocolbuffers/protobuf/releases/tag/${{steps.checkversion.outputs.package_upstream_version}})'
       # TODO --prerelease
