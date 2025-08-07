@@ -8,7 +8,7 @@ npm install --save-dev protobuf-conformance
 npx conformance_test_runner --help 
 ```
 
-This is an unofficial build of test runner from https://github.com/protocolbuffers/protobuf/tree/main/conformance.
+This is an unofficial distribution of the test runner from https://github.com/protocolbuffers/protobuf/tree/main/conformance.
 
 ### Test protos
 

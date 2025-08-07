@@ -8,4 +8,4 @@ npm install --save-dev protoc
 npx protoc --version 
 ```
 
-This is an unofficial distribution of the binaries from https://github.com/protocolbuffers/protobuf/releases.
+This is an unofficial distribution of the protoc binary from https://github.com/protocolbuffers/protobuf/releases.
