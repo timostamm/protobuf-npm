@@ -10,7 +10,7 @@ permissions:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
-  tag:
+  publish:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
@@ -30,7 +30,7 @@ jobs:
             --title 'protoc v${{steps.checkversion.outputs.package_version}}' \
             --notes 'Upstream release: [${{steps.checkversion.outputs.package_upstream_version}}](https://github.com/protocolbuffers/protobuf/releases/tag/${{steps.checkversion.outputs.package_upstream_version}})'
       # https://docs.github.com/en/actions/tutorials/publish-packages/publish-nodejs-packages#publishing-packages-to-the-npm-registry
-      # TODO
+      # TODO test publish
       - run: npm publish   --dry-run    --workspace packages/protoc --tag ${{steps.checkversion.outputs.package_dist_tag}}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
