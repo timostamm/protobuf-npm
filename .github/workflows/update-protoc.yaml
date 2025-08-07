@@ -28,6 +28,7 @@ jobs:
           npx checkversion protoc >> "$GITHUB_OUTPUT"
       - uses: peter-evans/create-pull-request@v7
         with:
+          token: ${{ secrets.PROTOBUF_NPM_GITHUB_TOKEN }}
           base: main
           branch: update-protoc-${{ steps.checkversion.outputs.package_version }}
           delete-branch: true

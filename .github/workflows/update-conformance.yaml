@@ -92,6 +92,7 @@ jobs:
           chmod +x packages/protobuf-conformance/bin/conformance_test_runner-linux-x64
       - uses: peter-evans/create-pull-request@v7
         with:
+          token: ${{ secrets.PROTOBUF_NPM_GITHUB_TOKEN }}
           base: main
           branch: update-conformance-${{ steps.checkversion.outputs.package_version }}
           delete-branch: true
