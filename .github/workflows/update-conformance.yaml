@@ -28,7 +28,8 @@ jobs:
           bazelisk-cache: true
           disk-cache: ${{ github.workflow }}
           repository-cache: true
-      - run: |
+      - id: checkversion
+        run: |
           npm ci
           npx update-conformance ${{inputs.version}}
           npx checkversion conformance >> "$GITHUB_OUTPUT"
@@ -53,7 +54,8 @@ jobs:
           bazelisk-cache: true
           disk-cache: ${{ github.workflow }}
           repository-cache: true
-      - run: |
+      - id: checkversion
+        run: |
           npm ci
           npx update-conformance ${{inputs.version}}
           npx checkversion conformance >> "$GITHUB_OUTPUT"
