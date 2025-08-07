@@ -29,7 +29,7 @@ jobs:
           gh release create 'protobuf-conformance/v${{steps.checkversion.outputs.package_version}}' \
             --title 'protobuf-conformance v${{steps.checkversion.outputs.package_version}}' \
             --notes 'Upstream release: [${{steps.checkversion.outputs.package_upstream_version}}](https://github.com/protocolbuffers/protobuf/releases/tag/${{steps.checkversion.outputs.package_upstream_version}})' \
-            --prelease=${{ steps.checkversion.outputs.package_is_prerelease && 'true' || 'false' }} \
+            --prerelease=${{ steps.checkversion.outputs.package_is_prerelease && 'true' || 'false' }} \
             --latest=${{ steps.checkversion.outputs.package_upstream_is_latest && 'true' || 'false' }}
       # https://docs.github.com/en/actions/tutorials/publish-packages/publish-nodejs-packages#publishing-packages-to-the-npm-registry
       # TODO test publish
