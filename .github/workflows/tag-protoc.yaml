@@ -6,6 +6,8 @@ on:
       - "main"
       - "update-protoc-**"
 permissions: read-all
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   tag-protoc:
     runs-on: ubuntu-latest
