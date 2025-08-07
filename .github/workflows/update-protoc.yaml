@@ -27,7 +27,7 @@ jobs:
       # TODO
       - id: TEST
         run: |
-          echo "foo4" > foo.txt
+          echo "foo5" > foo.txt
 
       - uses: peter-evans/create-pull-request@v7
         with:

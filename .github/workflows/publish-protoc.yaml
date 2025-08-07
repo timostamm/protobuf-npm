@@ -1,12 +1,18 @@
 name: publish-protoc
 on:
-  push:
-    tags:
-      - "protoc/v*.**"
-permissions: read-all
+  pull_request:
+    types: [closed]
+    branches:
+      - "main"
+      - "update-protoc-**"
+permissions:
+  contents: write
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
-  publish-protoc:
+  tag:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -17,8 +23,14 @@ jobs:
         run: |
           npm ci
           npx checkversion protoc >> "$GITHUB_OUTPUT"
-      # TODO
+      # TODO --prerelease
+      # TODO --latest
+      - run: |
+          gh release create 'protoc/v${{steps.checkversion.outputs.package_version}}' \
+            --title 'protoc v${{steps.checkversion.outputs.package_version}}' \
+            --notes 'Upstream release: [${{steps.checkversion.outputs.package_upstream_version}}](https://github.com/protocolbuffers/protobuf/releases/tag/${{steps.checkversion.outputs.package_upstream_version}})'
       # https://docs.github.com/en/actions/tutorials/publish-packages/publish-nodejs-packages#publishing-packages-to-the-npm-registry
+      # TODO
       - run: npm publish   --dry-run    --workspace packages/protoc --tag ${{steps.checkversion.outputs.package_dist_tag}}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
