@@ -13,7 +13,7 @@ permissions:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
-  update-protoc:
+  update:
     runs-on: ubuntu-latest
     if: ${{ inputs.version }}
     steps:

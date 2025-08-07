@@ -49,7 +49,7 @@ jobs:
         with:
           name: conformance_test_runner-darwin-x64
           path: packages/protobuf-conformance/.tmp/bazel-bin/conformance/conformance_test_runner
-  pr:
+  update:
     runs-on: ubuntu-latest
     needs: [build-conformance-darwin-x64, build-conformance-linux-x64]
     steps:
