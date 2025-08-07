@@ -10,8 +10,8 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "npm run build:protoc.js && npm run build:tsc",
-    "build:protoc.js": "esbuild src/protoc.ts --bundle --platform=node --outfile=protoc.cjs",
+    "build": "npm run build:protoc && npm run build:tsc",
+    "build:protoc": "esbuild src/protoc.ts --bundle --platform=node --outfile=protoc.cjs",
     "build:tsc": "tsc --noEmit",
     "lint": "biome lint",
     "format": "biome format --write"

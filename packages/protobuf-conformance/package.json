@@ -3,14 +3,16 @@
   "version": "29.2.0",
   "upstreamVersion": "v29.2",
   "bin": {
-    "conformance_test_runner": "conformance_test_runner.cjs"
+    "conformance_test_runner": "conformance_test_runner.cjs",
+    "conformance_proto_eject": "conformance_proto_eject.cjs"
   },
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "npm run build:conformance_test_runner.js && npm run build:tsc",
-    "build:conformance_test_runner.js": "esbuild src/conformance_test_runner.ts --bundle --platform=node --outfile=conformance_test_runner.cjs",
+    "build": "npm run build:conformance_test_runner && npm run build:conformance_proto_eject && npm run build:tsc",
+    "build:conformance_test_runner": "esbuild src/conformance_test_runner.ts --bundle --platform=node --outfile=conformance_test_runner.cjs",
+    "build:conformance_proto_eject": "esbuild src/conformance_proto_eject.ts --bundle --platform=node --outfile=conformance_proto_eject.cjs",
     "build:tsc": "tsc --noEmit",
     "lint": "biome lint",
     "format": "biome format --write"

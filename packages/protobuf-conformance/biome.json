@@ -2,6 +2,10 @@
   "root": false,
   "extends": "//",
   "files": {
-    "includes": ["**", "!conformance_test_runner.cjs"]
+    "includes": [
+      "**",
+      "!conformance_test_runner.cjs",
+      "!conformance_proto_eject.cjs"
+    ]
   }
 }
