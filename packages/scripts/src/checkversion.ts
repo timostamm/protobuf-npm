@@ -50,6 +50,7 @@ async function main(args: string[]): Promise<void> {
   const vars = {
     package_version: pkg.version,
     package_dist_tag: packageVersionPrerelease !== undefined ? "next" : "latest",
+    package_is_prerelease: packageVersionPrerelease !== undefined ? "1" : "",
     package_upstream_version: pkg.upstreamVersion,
     latest_upstream_version: latestRelease.tag_name,
     package_upstream_is_latest: latestRelease.tag_name === pkg.upstreamVersion ? "1" : "",
