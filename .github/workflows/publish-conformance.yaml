@@ -1,12 +1,8 @@
 name: publish-conformance
 on:
-  # TODO create tag on PR merge
-  # TODO publish package on tag create
   pull_request:
     types: [closed]
-    branches:
-      - "main"
-      - "update-conformance-**"
+    branches: [main]
 permissions:
   contents: write
 env:
@@ -14,7 +10,7 @@ env:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'update-conformance-')
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

@@ -2,9 +2,7 @@ name: publish-protoc
 on:
   pull_request:
     types: [closed]
-    branches:
-      - "main"
-      - "update-protoc-**"
+    branches: [main]
 permissions:
   contents: write
 env:
@@ -12,7 +10,7 @@ env:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'update-protoc-')
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
