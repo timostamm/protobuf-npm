@@ -25,9 +25,9 @@ jobs:
           npx checkversion protoc >> "$GITHUB_OUTPUT"
 
       # TODO
-      - id: TEST
-        run: |
-          echo "foo11" > foo.txt
+#      - id: TEST
+#        run: |
+#          echo "foo11" > foo.txt
 
       - uses: peter-evans/create-pull-request@v7
         with:
