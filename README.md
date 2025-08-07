@@ -1,12 +1,12 @@
 This project provides unofficial npm packages for https://github.com/protocolbuffers/protobuf.
 
 TODO
-- [ ] automate releases for new upstream versions
+- [x] automate releases for new upstream versions
   - [x] check for new version
   - [x] open PR with changes
   - [x] on PR merge: create GH release
-    - [ ] set --prerelease if necessary
-    - [ ] set --latest if necessary
+    - [x] set --prerelease if necessary
+    - [x] set --latest if necessary
   - [x] on tag: publish to npmjs.com
     - [ ] test publish 
     - [x] use different dist tag (e.g. "next") for pre-release versions
