@@ -27,7 +27,7 @@ jobs:
       # TODO
       - id: TEST
         run: |
-          echo "foo1" > foo.txt
+          echo "foo2" > foo.txt
 
       - uses: peter-evans/create-pull-request@v7
         with:
@@ -38,4 +38,4 @@ jobs:
           title: Update protoc to ${{ inputs.version }}
           body: |
             Update the package `protoc` to the upstream release [${{ inputs.version }}](https://github.com/protocolbuffers/protobuf/releases/tag/${{ inputs.version }}).
-            Merging this PR will publish version ${{ steps.checkversion.outputs.package_version }} of this package.
+            Merging this PR will tag a release, and publish version ${{ steps.checkversion.outputs.package_version }} of this package.
