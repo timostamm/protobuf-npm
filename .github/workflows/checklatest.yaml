@@ -2,7 +2,8 @@ name: checklatest
 on:
   workflow_dispatch:
   schedule:
-    - cron: "15 4,5 * * *"   # <=== Change this value
+    # Every day on 14:00 UTC
+    - cron: "0 14 * * *"
 permissions:
   actions: write
 env:
@@ -16,7 +17,7 @@ jobs:
         run: |
           npm ci
           npx checkversion protoc >> "$GITHUB_OUTPUT"
-      - if: ${{ steps.checkversion.outputs.package_upstream_is_latest }}
+      - if: ${{ !steps.checkversion.outputs.package_upstream_is_latest }}
         run: gh workflow run update-protoc.yaml -f version=${{steps.checkversion.outputs.latest_upstream_version}}
   checklatest-conformance:
     runs-on: ubuntu-latest
@@ -26,5 +27,5 @@ jobs:
         run: |
           npm ci
           npx checkversion conformance >> "$GITHUB_OUTPUT"
-      - if: ${{ steps.checkversion.outputs.package_upstream_is_latest }}
+      - if: ${{ !steps.checkversion.outputs.package_upstream_is_latest }}
         run: gh workflow run update-conformance.yaml -f version=${{steps.checkversion.outputs.latest_upstream_version}}
