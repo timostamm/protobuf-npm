@@ -1,39 +1,39 @@
 [
   {
-    "name": "protoc-21.0-rc-2-linux-aarch_64.zip",
-    "browser_download_url": "https://github.com/protocolbuffers/protobuf/releases/download/v21.0-rc2/protoc-21.0-rc-2-linux-aarch_64.zip",
+    "name": "protoc-26.0-linux-aarch_64.zip",
+    "browser_download_url": "https://github.com/protocolbuffers/protobuf/releases/download/v26.0/protoc-26.0-linux-aarch_64.zip",
     "platform": "linux",
     "arch": "arm64",
     "dotExe": false,
     "executable": "protoc-linux-aarch_64"
   },
   {
-    "name": "protoc-21.0-rc-2-linux-x86_64.zip",
-    "browser_download_url": "https://github.com/protocolbuffers/protobuf/releases/download/v21.0-rc2/protoc-21.0-rc-2-linux-x86_64.zip",
+    "name": "protoc-26.0-linux-x86_64.zip",
+    "browser_download_url": "https://github.com/protocolbuffers/protobuf/releases/download/v26.0/protoc-26.0-linux-x86_64.zip",
     "platform": "linux",
     "arch": "x64",
     "dotExe": false,
     "executable": "protoc-linux-x86_64"
   },
   {
-    "name": "protoc-21.0-rc-2-osx-aarch_64.zip",
-    "browser_download_url": "https://github.com/protocolbuffers/protobuf/releases/download/v21.0-rc2/protoc-21.0-rc-2-osx-aarch_64.zip",
+    "name": "protoc-26.0-osx-aarch_64.zip",
+    "browser_download_url": "https://github.com/protocolbuffers/protobuf/releases/download/v26.0/protoc-26.0-osx-aarch_64.zip",
     "platform": "darwin",
     "arch": "arm64",
     "dotExe": false,
     "executable": "protoc-osx-aarch_64"
   },
   {
-    "name": "protoc-21.0-rc-2-osx-x86_64.zip",
-    "browser_download_url": "https://github.com/protocolbuffers/protobuf/releases/download/v21.0-rc2/protoc-21.0-rc-2-osx-x86_64.zip",
+    "name": "protoc-26.0-osx-x86_64.zip",
+    "browser_download_url": "https://github.com/protocolbuffers/protobuf/releases/download/v26.0/protoc-26.0-osx-x86_64.zip",
     "platform": "darwin",
     "arch": "x64",
     "dotExe": false,
     "executable": "protoc-osx-x86_64"
   },
   {
-    "name": "protoc-21.0-rc-2-win64.zip",
-    "browser_download_url": "https://github.com/protocolbuffers/protobuf/releases/download/v21.0-rc2/protoc-21.0-rc-2-win64.zip",
+    "name": "protoc-26.0-win64.zip",
+    "browser_download_url": "https://github.com/protocolbuffers/protobuf/releases/download/v26.0/protoc-26.0-win64.zip",
     "platform": "win32",
     "arch": "x64",
     "dotExe": true,
