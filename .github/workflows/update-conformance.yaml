@@ -19,13 +19,18 @@ jobs:
     if: ${{ inputs.version }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: bazel-contrib/setup-bazel@0.15.0
         with:
-          path: ~/.cache/bazel
-          key: ${{ runner.os }}-bazel-cache
-      - run: npm ci
-      - run: npx update-conformance ${{ inputs.version }}
-      - run: npx build-conformance
+          bazelisk-version: 1.16.0
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+      - run: |
+          npm ci
+          npx update-conformance ${{ inputs.version }}
+      - run: |
+          cd packages/protobuf-conformance/.tmp
+          USE_BAZEL_VERSION=7.1.2 BAZEL_CXXOPTS="-std=c++17" bazel build conformance:conformance_test_runner
       - uses: actions/upload-artifact@v4
         with:
           name: conformance_test_runner-linux-x64
@@ -38,13 +43,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-      - uses: actions/cache@v4
+      - uses: bazel-contrib/setup-bazel@0.15.0
         with:
-          path: ~/.cache/bazel
-          key: ${{ runner.os }}-bazel-cache
-      - run: npm ci
-      - run: npx update-conformance ${{ inputs.version }}
-      - run: npx build-conformance
+          bazelisk-version: 1.16.0
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+      - run: |
+          npm ci
+          npx update-conformance ${{ inputs.version }}
+      - run: |
+          cd packages/protobuf-conformance/.tmp
+          USE_BAZEL_VERSION=7.1.2 BAZEL_CXXOPTS="-std=c++17" bazel build conformance:conformance_test_runner
       - uses: actions/upload-artifact@v4
         with:
           name: conformance_test_runner-darwin-x64
