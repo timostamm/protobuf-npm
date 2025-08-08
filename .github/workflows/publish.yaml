@@ -17,18 +17,18 @@ jobs:
         with:
           node-version-file: .nvmrc
           registry-url: 'https://registry.npmjs.org'
-      - id: checkversion
+      - id: localversion
         run: |
           npm ci
-          npx checkversion protoc >> "$GITHUB_OUTPUT"
+          npx version local protoc >> "$GITHUB_OUTPUT"
       - run: |
-          gh release create 'protoc/v${{steps.checkversion.outputs.package_version}}' \
-            --title 'protoc v${{steps.checkversion.outputs.package_version}}' \
-            --notes 'Upstream release: [${{steps.checkversion.outputs.package_upstream_version}}](https://github.com/protocolbuffers/protobuf/releases/tag/${{steps.checkversion.outputs.package_upstream_version}})' \
-            --prerelease=${{ steps.checkversion.outputs.package_is_prerelease && 'true' || 'false' }} \
-            --latest=${{ steps.checkversion.outputs.package_upstream_is_latest && 'true' || 'false' }}
+          gh release create 'protoc/v${{steps.localversion.outputs.package_version}}' \
+            --title 'protoc v${{steps.localversion.outputs.package_version}}' \
+            --notes 'Upstream release: [${{steps.localversion.outputs.package_upstream_version}}](https://github.com/protocolbuffers/protobuf/releases/tag/${{steps.localversion.outputs.package_upstream_version}})' \
+            --prerelease=${{ steps.localversion.outputs.package_is_prerelease && 'true' || 'false' }} \
+            --latest=${{ steps.localversion.outputs.package_upstream_is_latest && 'true' || 'false' }}
       # https://docs.github.com/en/actions/tutorials/publish-packages/publish-nodejs-packages#publishing-packages-to-the-npm-registry
-      - run: npm publish --workspace packages/protoc --tag ${{steps.checkversion.outputs.package_dist_tag}}
+      - run: npm publish --workspace packages/protoc --tag ${{steps.localversion.outputs.package_dist_tag}}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
   publish-conformance:
@@ -40,17 +40,17 @@ jobs:
         with:
           node-version-file: .nvmrc
           registry-url: 'https://registry.npmjs.org'
-      - id: checkversion
+      - id: localversion
         run: |
           npm ci
-          npx checkversion conformance >> "$GITHUB_OUTPUT"
+          npx version local conformance >> "$GITHUB_OUTPUT"
       - run: |
-          gh release create 'protobuf-conformance/v${{steps.checkversion.outputs.package_version}}' \
-            --title 'protobuf-conformance v${{steps.checkversion.outputs.package_version}}' \
-            --notes 'Upstream release: [${{steps.checkversion.outputs.package_upstream_version}}](https://github.com/protocolbuffers/protobuf/releases/tag/${{steps.checkversion.outputs.package_upstream_version}})' \
-            --prerelease=${{ steps.checkversion.outputs.package_is_prerelease && 'true' || 'false' }} \
-            --latest=${{ steps.checkversion.outputs.package_upstream_is_latest && 'true' || 'false' }}
+          gh release create 'protobuf-conformance/v${{steps.localversion.outputs.package_version}}' \
+            --title 'protobuf-conformance v${{steps.localversion.outputs.package_version}}' \
+            --notes 'Upstream release: [${{steps.localversion.outputs.package_upstream_version}}](https://github.com/protocolbuffers/protobuf/releases/tag/${{steps.localversion.outputs.package_upstream_version}})' \
+            --prerelease=${{ steps.localversion.outputs.package_is_prerelease && 'true' || 'false' }} \
+            --latest=${{ steps.localversion.outputs.package_upstream_is_latest && 'true' || 'false' }}
       # https://docs.github.com/en/actions/tutorials/publish-packages/publish-nodejs-packages#publishing-packages-to-the-npm-registry
-      - run: npm publish --workspace packages/protobuf-conformance --tag ${{steps.checkversion.outputs.package_dist_tag}}
+      - run: npm publish --workspace packages/protobuf-conformance --tag ${{steps.localversion.outputs.package_dist_tag}}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

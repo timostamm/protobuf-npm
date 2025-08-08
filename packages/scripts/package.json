@@ -5,6 +5,7 @@
   "bin": {
     "update-protoc": "src/update-protoc.ts",
     "update-conformance": "src/update-conformance.ts",
+    "version": "src/version.ts",
     "checkversion": "src/checkversion.ts",
     "diffcheck": "src/diffcheck.ts"
   },

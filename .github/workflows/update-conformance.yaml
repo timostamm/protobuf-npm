@@ -28,17 +28,17 @@ jobs:
           bazelisk-cache: true
           disk-cache: ${{ github.workflow }}
           repository-cache: true
-      - id: checkversion
+      - id: localversion
         run: |
           npm ci
           npx update-conformance ${{inputs.version}}
-          npx checkversion conformance >> "$GITHUB_OUTPUT"
+          npx version local conformance >> "$GITHUB_OUTPUT"
       - run: |
           cd packages/protobuf-conformance/.tmp
           USE_BAZEL_VERSION=7.1.2 BAZEL_CXXOPTS="-std=c++17" bazel build conformance:conformance_test_runner
       - uses: actions/upload-artifact@v4
         with:
-          name: conformance_test_runner-linux-x64-${{ steps.checkversion.outputs.package_version }}
+          name: conformance_test_runner-linux-x64-${{ steps.localversion.outputs.package_version }}
           path: packages/protobuf-conformance/.tmp/bazel-bin/conformance/conformance_test_runner
   build-conformance-darwin-x64:
     runs-on: macos-13
@@ -54,38 +54,38 @@ jobs:
           bazelisk-cache: true
           disk-cache: ${{ github.workflow }}
           repository-cache: true
-      - id: checkversion
+      - id: localversion
         run: |
           npm ci
           npx update-conformance ${{inputs.version}}
-          npx checkversion conformance >> "$GITHUB_OUTPUT"
+          npx version local conformance >> "$GITHUB_OUTPUT"
       - run: |
           cd packages/protobuf-conformance/.tmp
           USE_BAZEL_VERSION=7.1.2 BAZEL_CXXOPTS="-std=c++17" bazel build conformance:conformance_test_runner
       - uses: actions/upload-artifact@v4
         with:
-          name: conformance_test_runner-darwin-x64-${{ steps.checkversion.outputs.package_version }}
+          name: conformance_test_runner-darwin-x64-${{ steps.localversion.outputs.package_version }}
           path: packages/protobuf-conformance/.tmp/bazel-bin/conformance/conformance_test_runner
   update:
     runs-on: ubuntu-latest
     needs: [build-conformance-darwin-x64, build-conformance-linux-x64]
     steps:
       - uses: actions/checkout@v4
-      - id: checkversion
+      - id: localversion
         run: |
           npm ci
           npx update-conformance ${{inputs.version}}
-          npx checkversion conformance >> "$GITHUB_OUTPUT"
+          npx version local conformance >> "$GITHUB_OUTPUT"
       - uses: actions/download-artifact@v4
         with:
-          name: conformance_test_runner-darwin-x64-${{ steps.checkversion.outputs.package_version }}
+          name: conformance_test_runner-darwin-x64-${{ steps.localversion.outputs.package_version }}
           path: packages/protobuf-conformance/.tmp
       - run: |
           mv packages/protobuf-conformance/.tmp/conformance_test_runner packages/protobuf-conformance/bin/conformance_test_runner-darwin-x64
           chmod +x packages/protobuf-conformance/bin/conformance_test_runner-darwin-x64
       - uses: actions/download-artifact@v4
         with:
-          name: conformance_test_runner-linux-x64-${{ steps.checkversion.outputs.package_version }}
+          name: conformance_test_runner-linux-x64-${{ steps.localversion.outputs.package_version }}
           path: packages/protobuf-conformance/.tmp
       - run: |
           mv packages/protobuf-conformance/.tmp/conformance_test_runner packages/protobuf-conformance/bin/conformance_test_runner-linux-x64
@@ -94,10 +94,10 @@ jobs:
         with:
           token: ${{ secrets.PROTOBUF_NPM_GITHUB_TOKEN }}
           base: main
-          branch: update-conformance-${{ steps.checkversion.outputs.package_version }}
+          branch: update-conformance-${{ steps.localversion.outputs.package_version }}
           delete-branch: true
           commit-message: Update protobuf-conformance to ${{ inputs.version }}
           title: Update protobuf-conformance to ${{ inputs.version }}
           body: |
             Update the package `protobuf-conformance` to the upstream release [${{ inputs.version }}](https://github.com/protocolbuffers/protobuf/releases/tag/${{ inputs.version }}).
-            Merging this PR will publish version ${{ steps.checkversion.outputs.package_version }} of the package.
+            Merging this PR will publish version ${{ steps.localversion.outputs.package_version }} of the package.

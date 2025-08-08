@@ -21,19 +21,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-      - id: checkversion
+      - id: localversion
         run: |
           npm ci
           npx update-protoc ${{inputs.version}}
-          npx checkversion protoc >> "$GITHUB_OUTPUT"
+          npx version local protoc >> "$GITHUB_OUTPUT"
       - uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.PROTOBUF_NPM_GITHUB_TOKEN }}
           base: main
-          branch: update-protoc-${{ steps.checkversion.outputs.package_version }}
+          branch: update-protoc-${{ steps.localversion.outputs.package_version }}
           delete-branch: true
           commit-message: Update protoc to ${{ inputs.version }}
           title: Update protoc to ${{ inputs.version }}
           body: |
             Update the package `protoc` to the upstream release [${{ inputs.version }}](https://github.com/protocolbuffers/protobuf/releases/tag/${{ inputs.version }}).
-            Merging this PR will tag a release, and publish version ${{ steps.checkversion.outputs.package_version }} of the package.
+            Merging this PR will tag a release, and publish version ${{ steps.localversion.outputs.package_version }} of the package.
