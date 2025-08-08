@@ -2,7 +2,7 @@
 
 import { join } from "node:path";
 import { type PackageJson, readPackageJson } from "./lib/package";
-import { findRootDir } from "./lib/root";
+import { findRootDir } from "./lib/own";
 
 const usage = `USAGE: 
 

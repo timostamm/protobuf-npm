@@ -16,7 +16,7 @@ import {
   updatePackageVersions,
   writeJson,
 } from "./lib/package";
-import { findRootDir } from "./lib/root";
+import { findRootDir } from "./lib/own";
 
 const usage = `USAGE: update.ts 31.1|latest|current
 

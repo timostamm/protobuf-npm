@@ -3,7 +3,7 @@
 import { join } from "node:path";
 import { fetchGithubRelease } from "./lib/github";
 import { type PackageJson, readPackageJson } from "./lib/package";
-import { findRootDir } from "./lib/root";
+import { findRootDir } from "./lib/own";
 
 const usage = `USAGE: checkversion.ts protoc|conformance
 
