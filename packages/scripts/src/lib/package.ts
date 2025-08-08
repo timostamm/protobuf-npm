@@ -1,6 +1,7 @@
 import type { GithubRelease } from "./github";
 import { readFileSync, writeFileSync } from "node:fs";
-import { parseUpstreamVersion } from "./upstream";
+import { parseUpstreamVersionFromTag } from "./upstream";
+import { parseOwnVersionFromPkg } from "./own";
 
 export type PackageJson = {
   name: string;
@@ -29,14 +30,30 @@ export function writeJson(path: string, json: unknown) {
 /**
  * Update the version in package.json, and the references in the
  * nearest package-lock.json.
+ *
+ * Creates a package version like 31.1.0 from:
+ * - The major and minor version of the upstream release, e.g., `31.1` from `v31.1`.
+ * - The patch version of current package version, e.g., `2` from `30.0.2`.
  */
 export function updatePackageVersions(
   release: GithubRelease,
   pkg: PackageJson,
   lock?: Lockfile,
 ): void {
+  const upstreamVersion = parseUpstreamVersionFromTag(release.tag_name);
+  if (!upstreamVersion) {
+    throw new Error(
+      `Unexpected tag_name "${release.tag_name}" for GitHub ${release.prerelease ? "prerelease" : "release"} "${release.name}"`,
+    );
+  }
+  const pkgVersion = parseOwnVersionFromPkg(pkg);
+  if (!pkgVersion) {
+    throw new Error(`Failed to parse version from package "${pkg.name}"`);
+  }
   // Update version in package
-  pkg.version = createPackageVersion(release, pkg.version);
+  pkg.version = upstreamVersion.prerelease
+    ? `${upstreamVersion.major}.${upstreamVersion.minor}.${pkgVersion.patch}-${upstreamVersion.prerelease}`
+    : `${upstreamVersion.major}.${upstreamVersion.minor}.${pkgVersion.patch}`;
   pkg.upstreamVersion = release.tag_name;
   // Update references in lock-file
   if (lock) {
@@ -45,37 +62,6 @@ export function updatePackageVersions(
       updatePackageDep(lockPkg, pkg.name, pkg.version);
     }
   }
-}
-
-/**
- * Create a package version like 31.1.0 from:
- * - The major and minor version an upstream release, e.g., `31.1` from `v31.1`.
- * - The patch version of current package version, e.g., `2` from `30.0.2`.
- */
-function createPackageVersion(
-  release: GithubRelease,
-  currentVersion: string,
-): string {
-  const upstream = parseUpstreamVersion(release.tag_name);
-  if (!upstream) {
-    throw new Error(
-      `Unexpected tag_name "${release.tag_name}" for GitHub ${release.prerelease ? "prerelease" : "release"} "${release.name}"`,
-    );
-  }
-  if (release.prerelease !== !!upstream.prerelease) {
-    throw new Error(
-      `Unexpected tag_name "${release.tag_name}" for GitHub ${release.prerelease ? "prerelease" : "release"} "${release.name}"`,
-    );
-  }
-  const currentVersionMatch = currentVersion.match(/^\d+\.\d+\.(\d+)/);
-  if (!currentVersionMatch) {
-    throw new Error(`Unexpected currentVersion "${currentVersion}"`);
-  }
-  const patch = currentVersionMatch[1];
-  if (release.prerelease) {
-    return `${upstream.major}.${upstream.minor}.${patch}-${upstream.prerelease}`;
-  }
-  return `${upstream.major}.${upstream.minor}.${patch}`;
 }
 
 type Lockfile = {
