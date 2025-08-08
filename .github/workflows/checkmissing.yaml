@@ -1,0 +1,26 @@
+name: checkmissing
+on:
+  workflow_dispatch:
+  schedule:
+    # Every day on 14:00 UTC
+    - cron: "0 14 * * *"
+permissions:
+  actions: write
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+# Check all own and all upstream releases (including prereleases),
+# and find the earliest missing release for the packages "proto"
+# and "protobuf-conformance".
+jobs:
+  checkmissing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: checkversion
+        run: |
+          npm ci
+          npx version missing >> "$GITHUB_OUTPUT"
+      - if: ${{ !steps.checkversion.outputs.missing_protoc }}
+        run: gh workflow run update-protoc.yaml -f version=${{steps.checkversion.outputs.missing_protoc}}
+      - if: ${{ !steps.checkversion.outputs.missing_conformance }}
+        run: gh workflow run update-protoc.yaml -f version=${{steps.checkversion.outputs.missing_conformance}}
