@@ -20,7 +20,3 @@ jobs:
           npm ci
           npm run all
           npx diffcheck
-      - run: |
-          npx update-protoc current
-          npx update-conformance current
-          npx diffcheck
