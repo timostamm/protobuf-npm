@@ -1,9 +1,13 @@
 name: checkmissing
 on:
   workflow_dispatch:
+    # Manually
   schedule:
     # Every day on 14:00 UTC
     - cron: "0 14 * * *"
+  release:
+    # Run right after release, so we can pick up the next version
+    types: [created]
 permissions:
   actions: write
 env:
