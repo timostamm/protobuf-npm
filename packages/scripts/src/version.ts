@@ -126,8 +126,8 @@ async function missing(args: string[]): Promise<void> {
   const missingConformance = missing
     .filter((miss) => miss.missingConformance)
     .pop();
-  console.log(`protoc=${missingProtoc?.upstream.tag_name}`);
-  console.log(`conformance=${missingConformance?.upstream.tag_name}`);
+  console.log(`missing_protoc=${missingProtoc?.upstream.tag_name}`);
+  console.log(`missing_conformance=${missingConformance?.upstream.tag_name}`);
 }
 
 async function local(args: string[]): Promise<void> {
