@@ -1,4 +1,4 @@
-import type { GithubReleaseAsset } from "./github";
+import type { GithubRelease, GithubReleaseAsset } from "./github";
 import { unzipSync } from "fflate";
 import { dirname, join } from "node:path";
 import {
@@ -8,6 +8,44 @@ import {
   writeFileSync,
   readFileSync,
 } from "node:fs";
+
+export function filterSupportedUpstreamReleases(
+  releases: GithubRelease[],
+): GithubRelease[] {
+  return releases
+    .filter((release) => !release.draft)
+    .filter((release) => !release.draft)
+    .filter((release) => parseUpstreamVersion(release.tag_name) !== undefined)
+    .filter((release) => protocAssets(release.assets).length > 0);
+}
+
+export type UpstreamVersion = {
+  major: number;
+  minor: number;
+  prerelease?: string;
+};
+
+/**
+ * Parse a version of a github.com/protocolbuffers/protobuf release tag name.
+ */
+export function parseUpstreamVersion(
+  tag_name: string,
+): UpstreamVersion | undefined {
+  const tagNameRe = /^v(\d+)\.(\d+)(?:-(rc\d))?$/;
+  const match = tag_name.match(tagNameRe);
+  if (!match) {
+    return undefined;
+  }
+  const [, major, minor, prerelease] = match;
+  return {
+    major: parseInt(major, 10),
+    minor: parseInt(minor, 10),
+    prerelease:
+      prerelease !== undefined && prerelease.length > 0
+        ? prerelease
+        : undefined,
+  };
+}
 
 export type ProtocAsset = {
   name: string; // e.g. protoc-31.1-linux-aarch_64.zip

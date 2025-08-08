@@ -1,5 +1,6 @@
 import type { GithubRelease } from "./github";
 import { readFileSync, writeFileSync } from "node:fs";
+import { parseUpstreamVersion } from "./upstream";
 
 export type PackageJson = {
   name: string;
@@ -55,15 +56,13 @@ function createPackageVersion(
   release: GithubRelease,
   currentVersion: string,
 ): string {
-  const tagNameRe = /^v(\d+)\.(\d+)(?:-(rc\d))?$/;
-  const tagNameMatch = release.tag_name.match(tagNameRe);
-  if (!tagNameMatch) {
+  const upstream = parseUpstreamVersion(release.tag_name);
+  if (!upstream) {
     throw new Error(
       `Unexpected tag_name "${release.tag_name}" for GitHub ${release.prerelease ? "prerelease" : "release"} "${release.name}"`,
     );
   }
-  const [, major, minor, prerelease] = tagNameMatch;
-  if (release.prerelease !== !!prerelease) {
+  if (release.prerelease !== !!upstream.prerelease) {
     throw new Error(
       `Unexpected tag_name "${release.tag_name}" for GitHub ${release.prerelease ? "prerelease" : "release"} "${release.name}"`,
     );
@@ -74,9 +73,9 @@ function createPackageVersion(
   }
   const patch = currentVersionMatch[1];
   if (release.prerelease) {
-    return `${major}.${minor}.${patch}-${prerelease}`;
+    return `${upstream.major}.${upstream.minor}.${patch}-${upstream.prerelease}`;
   }
-  return `${major}.${minor}.${patch}`;
+  return `${upstream.major}.${upstream.minor}.${patch}`;
 }
 
 type Lockfile = {

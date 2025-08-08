@@ -8,7 +8,7 @@ import {
   extractInclude,
   protocAssets,
   writeAssets,
-} from "./lib/protoc-assets";
+} from "./lib/upstream";
 import { updateReadme } from "./lib/readme";
 import {
   readLockfile,
