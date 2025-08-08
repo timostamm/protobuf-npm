@@ -9,13 +9,18 @@ import {
   readFileSync,
 } from "node:fs";
 
+const minimumSupportedMajor = 26;
+
 export function filterSupportedUpstreamReleases(
   releases: GithubRelease[],
 ): GithubRelease[] {
   return releases
     .filter((release) => !release.draft)
     .filter((release) => !release.draft)
-    .filter((release) => parseUpstreamVersion(release.tag_name) !== undefined)
+    .filter((release) => {
+      const version = parseUpstreamVersionFromTag(release.tag_name);
+      return version !== undefined && version.major >= minimumSupportedMajor;
+    })
     .filter((release) => protocAssets(release.assets).length > 0);
 }
 
@@ -28,7 +33,7 @@ export type UpstreamVersion = {
 /**
  * Parse a version of a github.com/protocolbuffers/protobuf release tag name.
  */
-export function parseUpstreamVersion(
+export function parseUpstreamVersionFromTag(
   tag_name: string,
 ): UpstreamVersion | undefined {
   const tagNameRe = /^v(\d+)\.(\d+)(?:-(rc\d))?$/;
