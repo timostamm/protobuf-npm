@@ -4,7 +4,9 @@
 export type GithubRelease = {
   name: string;
   tag_name: string;
+  draft: boolean;
   prerelease: boolean;
+  published_at: string;
   assets: GithubReleaseAsset[];
 };
 
@@ -17,6 +19,9 @@ export type GithubReleaseAsset = {
   browser_download_url: string; // e.g. https://github.com/protocolbuffers/protobuf/releases/download/v31.1/protoc-31.1-linux-aarch_64.zip
 };
 
+/**
+ * List releases from GitHub.
+ */
 export async function listGithubReleases(owner: string, repo: string) {
   const headers = new Headers({
     Accept: "application/vnd.github+json",
