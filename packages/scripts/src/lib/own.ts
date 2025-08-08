@@ -2,6 +2,10 @@ import { dirname, join } from "node:path";
 import { existsSync } from "node:fs";
 import type { GithubRelease } from "./github";
 import type { PackageJson } from "./package";
+import {
+  filterSupportedUpstreamReleases,
+  parseUpstreamVersionFromTag,
+} from "./upstream";
 
 export type OwnVersion = {
   product: "protoc" | "conformance";
@@ -36,6 +40,56 @@ export function parseOwnVersionFromTag(
   };
 }
 
+type OwnMissing = {
+  upstream: GithubRelease;
+  missingProtoc: boolean;
+  missingConformance: boolean;
+};
+
+/**
+ * Find missing own releases for upstream releases.
+ */
+export function findOwnMissing(
+  upstreamReleases: GithubRelease[],
+  ownReleases: GithubRelease[],
+): OwnMissing[] {
+  upstreamReleases = filterSupportedUpstreamReleases(upstreamReleases);
+  ownReleases = filterSupportedOwnReleases(ownReleases);
+  const missing: OwnMissing[] = [];
+  for (const upstreamRelease of upstreamReleases) {
+    const upstreamVersion = parseUpstreamVersionFromTag(
+      upstreamRelease.tag_name,
+    );
+    if (!upstreamVersion) {
+      continue;
+    }
+    const ownVersions = ownReleases
+      .map((release) => parseOwnVersionFromTag(release.tag_name))
+      .filter((version) => version !== undefined)
+      .filter(
+        (version) =>
+          version.major === upstreamVersion.major &&
+          version.minor === upstreamVersion.minor &&
+          version.prerelease === upstreamVersion.prerelease,
+      );
+    const missingProtoc = ownVersions.every(
+      (version) => version.product !== "protoc",
+    );
+    const missingConformance = ownVersions.every(
+      (version) => version.product !== "conformance",
+    );
+    if (!missingProtoc && !missingConformance) {
+      continue;
+    }
+    missing.push({
+      upstream: upstreamRelease,
+      missingProtoc,
+      missingConformance,
+    });
+  }
+  return missing;
+}
+
 /**
  * Parse a version of a package.json.
  */
@@ -58,43 +112,6 @@ export function parseOwnVersionFromPkg(
         ? prerelease
         : undefined,
   };
-}
-
-export function filterOwnReleases(
-  releases: GithubRelease[],
-  filter: {
-    product?: "protoc" | "conformance";
-    major?: number;
-    minor?: number;
-    patch?: number;
-    prerelease?: string;
-  },
-) {
-  return releases.filter((release) => {
-    const version = parseOwnVersionFromTag(release.tag_name);
-    if (!version) {
-      return false;
-    }
-    if (filter.product !== undefined && filter.product !== version.product) {
-      return false;
-    }
-    if (filter.major !== undefined && filter.major !== version.major) {
-      return false;
-    }
-    if (filter.minor !== undefined && filter.minor !== version.minor) {
-      return false;
-    }
-    if (filter.patch !== undefined && filter.patch !== version.patch) {
-      return false;
-    }
-    if (
-      filter.prerelease !== undefined &&
-      filter.prerelease !== version.prerelease
-    ) {
-      return false;
-    }
-    return true;
-  });
 }
 
 export function filterSupportedOwnReleases(
