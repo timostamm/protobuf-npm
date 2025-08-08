@@ -20,7 +20,7 @@ jobs:
         run: |
           npm ci
           npx version missing >> "$GITHUB_OUTPUT"
-      - if: ${{ !steps.checkversion.outputs.missing_protoc }}
+      - if: ${{ steps.checkversion.outputs.missing_protoc }}
         run: gh workflow run update-protoc.yaml -f version=${{steps.checkversion.outputs.missing_protoc}}
-      - if: ${{ !steps.checkversion.outputs.missing_conformance }}
-        run: gh workflow run update-protoc.yaml -f version=${{steps.checkversion.outputs.missing_conformance}}
+      - if: ${{ steps.checkversion.outputs.missing_conformance }}
+        run: gh workflow run update-conformance.yaml -f version=${{steps.checkversion.outputs.missing_conformance}}
