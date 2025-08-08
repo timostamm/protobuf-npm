@@ -2,7 +2,7 @@
 
 import { join, normalize } from "node:path";
 import { rmSync } from "node:fs";
-import { fetchGithubRelease } from "./lib/github";
+import { fetchGithubRelease, listGithubReleases } from "./lib/github";
 import {
   extractExecutable,
   extractInclude,
@@ -16,7 +16,7 @@ import {
   updatePackageVersions,
   writeJson,
 } from "./lib/package";
-import { findRootDir } from "./lib/own";
+import { findFreeVersion, findRootDir } from "./lib/own";
 
 const usage = `USAGE: update.ts 31.1|latest|current
 
@@ -88,8 +88,13 @@ async function main(args: string[]): Promise<void> {
   writeAssets(assets, pkgDir);
 
   // update package.json and others
-  updatePackageVersions(release, pkg, lock);
-  console.log(`Update package version to ${pkg.version}...`);
+  const freeVersion = findFreeVersion(
+    "protoc",
+    release,
+    await listGithubReleases("timostamm", "protobuf-npm"),
+  );
+  console.log(`Update package version to ${freeVersion}...`);
+  updatePackageVersions(freeVersion, release.tag_name, pkg, lock);
   writeJson(pkgPath, pkg);
   writeJson(lockPath, lock);
   updateReadme(join(pkgDir, "README.md"), release);

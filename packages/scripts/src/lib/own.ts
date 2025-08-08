@@ -40,6 +40,50 @@ export function parseOwnVersionFromTag(
   };
 }
 
+export function findFreeVersion(
+  product: "protoc" | "conformance",
+  upstreamRelease: GithubRelease,
+  ownReleases: GithubRelease[],
+): string {
+  const free = findFreeOwnVersion(product, upstreamRelease, ownReleases);
+  return free.prerelease
+    ? `${free.major}.${free.minor}.${free.patch}-${free.prerelease}`
+    : `${free.major}.${free.minor}.${free.patch}`;
+}
+
+function findFreeOwnVersion(
+  product: "protoc" | "conformance",
+  upstreamRelease: GithubRelease,
+  ownReleases: GithubRelease[],
+): OwnVersion {
+  const upstreamVersion = parseUpstreamVersionFromTag(upstreamRelease.tag_name);
+  if (!upstreamVersion) {
+    throw new Error(
+      `Unexpected tag_name "${upstreamRelease.tag_name}" for GitHub ${upstreamRelease.prerelease ? "prerelease" : "release"} "${upstreamRelease.name}"`,
+    );
+  }
+  const free: OwnVersion = {
+    product,
+    major: upstreamVersion.major,
+    minor: upstreamVersion.minor,
+    patch: 0,
+    prerelease: upstreamVersion.prerelease,
+  };
+  const highestTaken = filterSupportedOwnReleases(ownReleases)
+    .map((release) => parseOwnVersionFromTag(release.tag_name))
+    .filter((version) => version !== undefined)
+    .filter((version) => version.product === product)
+    .filter((version) => version.major === upstreamVersion.major)
+    .filter((version) => version.minor === upstreamVersion.minor)
+    .filter((version) => version.prerelease === upstreamVersion.prerelease)
+    .sort((a, b) => a.patch - b.patch)
+    .pop();
+  if (highestTaken) {
+    free.patch = highestTaken.patch + 1;
+  }
+  return free;
+}
+
 type OwnMissing = {
   upstream: GithubRelease;
   missingProtoc: boolean;

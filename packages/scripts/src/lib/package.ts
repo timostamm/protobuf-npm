@@ -1,7 +1,4 @@
-import type { GithubRelease } from "./github";
 import { readFileSync, writeFileSync } from "node:fs";
-import { parseUpstreamVersionFromTag } from "./upstream";
-import { parseOwnVersionFromPkg } from "./own";
 
 export type PackageJson = {
   name: string;
@@ -36,30 +33,19 @@ export function writeJson(path: string, json: unknown) {
  * - The patch version of current package version, e.g., `2` from `30.0.2`.
  */
 export function updatePackageVersions(
-  release: GithubRelease,
+  version: string,
+  upstreamVersion: string,
   pkg: PackageJson,
   lock?: Lockfile,
 ): void {
-  const upstreamVersion = parseUpstreamVersionFromTag(release.tag_name);
-  if (!upstreamVersion) {
-    throw new Error(
-      `Unexpected tag_name "${release.tag_name}" for GitHub ${release.prerelease ? "prerelease" : "release"} "${release.name}"`,
-    );
-  }
-  const pkgVersion = parseOwnVersionFromPkg(pkg);
-  if (!pkgVersion) {
-    throw new Error(`Failed to parse version from package "${pkg.name}"`);
-  }
   // Update version in package
-  pkg.version = upstreamVersion.prerelease
-    ? `${upstreamVersion.major}.${upstreamVersion.minor}.${pkgVersion.patch}-${upstreamVersion.prerelease}`
-    : `${upstreamVersion.major}.${upstreamVersion.minor}.${pkgVersion.patch}`;
-  pkg.upstreamVersion = release.tag_name;
+  pkg.version = version;
+  pkg.upstreamVersion = upstreamVersion;
   // Update references in lock-file
   if (lock) {
-    findLockPackage(lock, pkg.name).version = pkg.version;
+    findLockPackage(lock, pkg.name).version = version;
     for (const lockPkg of Object.values(lock.packages)) {
-      updatePackageDep(lockPkg, pkg.name, pkg.version);
+      updatePackageDep(lockPkg, pkg.name, version);
     }
   }
 }

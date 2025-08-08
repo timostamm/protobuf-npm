@@ -3,7 +3,7 @@
 import { basename, dirname, join, normalize, matchesGlob } from "node:path";
 import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { type Unzipped, unzipSync } from "fflate";
-import { fetchGithubRelease } from "./lib/github";
+import { fetchGithubRelease, listGithubReleases } from "./lib/github";
 import {
   readLockfile,
   readPackageJson,
@@ -11,7 +11,7 @@ import {
   writeJson,
 } from "./lib/package";
 import { updateReadme } from "./lib/readme";
-import { findRootDir } from "./lib/own";
+import { findFreeVersion, findRootDir } from "./lib/own";
 
 const usage = `USAGE: update.ts 31.1|latest|current
 
@@ -60,8 +60,13 @@ async function main(args: string[]): Promise<void> {
   writeInclude(join(pkgDir, "include"), unzipped);
 
   // update package.json and others
-  updatePackageVersions(release, pkg, lock);
-  console.log(`Update package version to ${pkg.version}...`);
+  const freeVersion = findFreeVersion(
+    "conformance",
+    release,
+    await listGithubReleases("timostamm", "protobuf-npm"),
+  );
+  console.log(`Update package version to ${freeVersion}...`);
+  updatePackageVersions(freeVersion, release.tag_name, pkg, lock);
   writeJson(pkgPath, pkg);
   writeJson(lockPath, lock);
   updateReadme(join(pkgDir, "README.md"), release);
