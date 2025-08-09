@@ -122,7 +122,7 @@ async function missing(args: string[]): Promise<void> {
   );
   // biome-ignore format: Don't break lines for readability
   printVars(githubOutput, {
-    package_version: missing.filter((miss) => miss.missingProtoc)
+    missing_protoc: missing.filter((miss) => miss.missingProtoc)
         .pop()?.upstream.tag_name ?? "",
     missing_conformance: missing.filter((miss) => miss.missingConformance)
         .pop()?.upstream.tag_name ?? "",
