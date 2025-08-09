@@ -12,7 +12,6 @@ permissions:
   pull-requests: write
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}
 jobs:
   build-conformance-linux-x64:
     runs-on: ubuntu-latest
