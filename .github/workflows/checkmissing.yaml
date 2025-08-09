@@ -8,8 +8,6 @@ on:
   release:
     # Run right after release, so we can pick up the next version
     types: [created]
-permissions:
-  actions: write
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 # Check all own and all upstream releases (including prereleases),
