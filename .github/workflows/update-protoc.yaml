@@ -6,12 +6,8 @@ on:
         description: 'Upstream version, e.g. v29.2'
         required: true
         type: string
-permissions:
-  # https://github.com/peter-evans/create-pull-request/tree/main?tab=readme-ov-file#token
-  contents: write
-  pull-requests: write
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.PROTOBUF_NPM_GITHUB_TOKEN }}
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -28,7 +24,6 @@ jobs:
           npx version local protoc >> "$GITHUB_OUTPUT"
       - uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.PROTOBUF_NPM_GITHUB_TOKEN }}
           base: main
           branch: update-protoc-${{ steps.localversion.outputs.package_version }}
           delete-branch: true
