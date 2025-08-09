@@ -9,7 +9,7 @@ on:
     # Run right after release, so we can pick up the next version
     types: [created]
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.PROTOBUF_NPM_GITHUB_TOKEN }}
 # Check all own and all upstream releases (including prereleases),
 # and find the earliest missing release for the packages "proto"
 # and "protobuf-conformance".
