@@ -21,7 +21,7 @@ jobs:
       - id: checkversion
         run: |
           npm ci
-          npx version missing >> "$GITHUB_OUTPUT"
+          npx version missing --github-output "$GITHUB_OUTPUT"
       - if: ${{ steps.checkversion.outputs.missing_protoc }}
         run: gh workflow run update-protoc.yaml -f version=${{steps.checkversion.outputs.missing_protoc}}
       - if: ${{ steps.checkversion.outputs.missing_conformance }}

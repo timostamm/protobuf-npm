@@ -9,10 +9,11 @@ import {
 } from "./lib/own";
 import { listGithubReleases } from "./lib/github";
 import { filterSupportedUpstreamReleases } from "./lib/upstream";
+import { appendFileSync } from "node:fs";
 
 const usage = `USAGE: 
 
-version.ts local protoc|conformance
+version.ts local protoc|conformance [--github-output "$GITHUB_OUTPUT"]
 
   Reads the version from package.json and outputs:
   - package_version: Version from the local package.json.
@@ -20,7 +21,7 @@ version.ts local protoc|conformance
   - package_is_prerelease: Whether  the package_version is a prerelease version.
   - package_upstream_version: Upstream version of the local package.
 
-version.ts missing
+version.ts missing [--github-output "$GITHUB_OUTPUT"]
 
   Outputs the earliest missing release for protoc, and for conformance.
 
@@ -42,10 +43,6 @@ version.ts list missing
 void main(process.argv.slice(2));
 
 async function main(args: string[]): Promise<void> {
-  if (args.length === 0) {
-    console.error(usage);
-    process.exit(1);
-  }
   switch (args.shift()) {
     case "local":
       await local(args);
@@ -114,6 +111,7 @@ async function list(args: string[]): Promise<void> {
 }
 
 async function missing(args: string[]): Promise<void> {
+  const githubOutput = parseGithubOutputArg(args);
   if (args.length !== 0) {
     console.error(usage);
     process.exit(1);
@@ -122,21 +120,18 @@ async function missing(args: string[]): Promise<void> {
     await listGithubReleases("protocolbuffers", "protobuf"),
     await listGithubReleases("timostamm", "protobuf-npm"),
   );
-  const missingProtoc = missing.filter((miss) => miss.missingProtoc).pop();
-  const missingConformance = missing
-    .filter((miss) => miss.missingConformance)
-    .pop();
-  console.log(`missing_protoc=${missingProtoc?.upstream.tag_name}`);
-  console.log(`missing_conformance=${missingConformance?.upstream.tag_name}`);
+  // biome-ignore format: Don't break lines for readability
+  printVars(githubOutput, {
+    package_version: missing.filter((miss) => miss.missingProtoc)
+        .pop()?.upstream.tag_name ?? "",
+    missing_conformance: missing.filter((miss) => miss.missingConformance)
+        .pop()?.upstream.tag_name ?? "",
+  });
 }
 
 async function local(args: string[]): Promise<void> {
-  if (args.length !== 1) {
-    console.error(usage);
-    process.exit(1);
-  }
   let pkg: PackageJson;
-  switch (args[0]) {
+  switch (args.shift()) {
     case "protoc":
       pkg = readPackageJson(
         join(findRootDir(), "packages/protoc/package.json"),
@@ -151,17 +146,52 @@ async function local(args: string[]): Promise<void> {
       console.error(usage);
       process.exit(1);
   }
+  const githubOutput = parseGithubOutputArg(args);
+  if (args.length !== 0) {
+    console.error(usage);
+    process.exit(1);
+  }
   const packageVersionPrerelease = pkg.version.match(
     /^\d+\.\d+\.\d+(-.+)?$/,
   )?.[1];
   // biome-ignore format: Don't break lines for readability
-  const vars = {
+  printVars(githubOutput, {
     package_version: pkg.version,
     package_dist_tag: packageVersionPrerelease !== undefined ? "next" : "latest",
     package_is_prerelease: packageVersionPrerelease !== undefined ? "1" : "",
     package_upstream_version: pkg.upstreamVersion,
-  } satisfies Record<string, string>;
+  });
+}
+
+function printVars(
+  githubOutput: string | undefined,
+  vars: Record<string, string>,
+): void {
+  if (githubOutput !== undefined) {
+    console.log(`Github output:`);
+  }
   for (const [key, val] of Object.entries(vars)) {
     console.log(`${key}=${val}`);
+    if (githubOutput !== undefined) {
+      appendFileSync(githubOutput, `${key}=${val}\n`);
+    }
+  }
+}
+
+function parseGithubOutputArg(args: string[]): string | undefined {
+  switch (args.shift()) {
+    case "--github-output": {
+      const githubOutput = args.shift();
+      if (githubOutput === undefined) {
+        console.error(usage);
+        process.exit(1);
+      }
+      return githubOutput;
+    }
+    case undefined:
+      return undefined;
+    default:
+      console.error(usage);
+      process.exit(1);
   }
 }

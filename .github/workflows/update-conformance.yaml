@@ -31,7 +31,7 @@ jobs:
         run: |
           npm ci
           npx update-conformance ${{inputs.version}}
-          npx version local conformance >> "$GITHUB_OUTPUT"
+          npx version local conformance --github-output "$GITHUB_OUTPUT"
       - run: |
           cd packages/protobuf-conformance/.tmp
           USE_BAZEL_VERSION=7.1.2 BAZEL_CXXOPTS="-std=c++17" bazel build conformance:conformance_test_runner
@@ -57,7 +57,7 @@ jobs:
         run: |
           npm ci
           npx update-conformance ${{inputs.version}}
-          npx version local conformance >> "$GITHUB_OUTPUT"
+          npx version local conformance --github-output "$GITHUB_OUTPUT"
       - run: |
           cd packages/protobuf-conformance/.tmp
           USE_BAZEL_VERSION=7.1.2 BAZEL_CXXOPTS="-std=c++17" bazel build conformance:conformance_test_runner
@@ -74,7 +74,7 @@ jobs:
         run: |
           npm ci
           npx update-conformance ${{inputs.version}}
-          npx version local conformance >> "$GITHUB_OUTPUT"
+          npx version local conformance --github-output "$GITHUB_OUTPUT"
       - uses: actions/download-artifact@v4
         with:
           name: conformance_test_runner-darwin-x64-${{ steps.localversion.outputs.package_version }}

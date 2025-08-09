@@ -19,7 +19,7 @@ jobs:
       - id: localversion
         run: |
           npm ci
-          npx version local protoc >> "$GITHUB_OUTPUT"
+          npx version local protoc --github-output "$GITHUB_OUTPUT"
       - run: |
           gh release create 'protoc/v${{steps.localversion.outputs.package_version}}' \
             --title 'protoc v${{steps.localversion.outputs.package_version}}' \
@@ -40,7 +40,7 @@ jobs:
       - id: localversion
         run: |
           npm ci
-          npx version local conformance >> "$GITHUB_OUTPUT"
+          npx version local conformance --github-output "$GITHUB_OUTPUT"
       - run: |
           gh release create 'protobuf-conformance/v${{steps.localversion.outputs.package_version}}' \
             --title 'protobuf-conformance v${{steps.localversion.outputs.package_version}}' \
