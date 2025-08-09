@@ -1,7 +1,7 @@
 {
   "name": "protobuf-conformance",
-  "version": "31.0.0",
-  "upstreamVersion": "v31.0",
+  "version": "31.1.0",
+  "upstreamVersion": "v31.1",
   "bin": {
     "conformance_test_runner": "conformance_test_runner.cjs",
     "conformance_proto_eject": "conformance_proto_eject.cjs"
