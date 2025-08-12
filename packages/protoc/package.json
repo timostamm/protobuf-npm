@@ -13,6 +13,7 @@
     "build": "npm run build:protoc && npm run build:tsc",
     "build:protoc": "esbuild src/protoc.ts --bundle --platform=node --outfile=protoc.cjs",
     "build:tsc": "tsc --noEmit",
+    "test": "tsx --test src/*.test.ts",
     "lint": "biome lint",
     "format": "biome format --write"
   },

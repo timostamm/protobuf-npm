@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "clean": "git clean -Xdf",
-    "all": "npm run format && npm run build && npm run lint",
+    "all": "npm run format && npm run test && npm run build && npm run lint",
+    "test": "npm run -ws --if-present test",
     "build": "npm run -ws --if-present build",
     "lint": "biome lint && npm run -ws --if-present lint",
     "format": "biome format --write && npm run -ws --if-present format"
