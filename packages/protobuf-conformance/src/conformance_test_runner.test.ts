@@ -9,6 +9,7 @@ void suite("conformance_test_runner", () => {
       encoding: "utf8",
     });
     assert.strictEqual(ret.status, 1);
+    // Unfortunately, conformance_test_runner does not support a --version flag
     assert.strictEqual(ret.stderr.includes("Unknown option: --foo"), true);
   });
 });
