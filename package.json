@@ -1,9 +1,6 @@
 {
   "name": "root",
   "private": true,
-  "config": {
-    "protocVersion": "29.2"
-  },
   "scripts": {
     "clean": "git clean -Xdf",
     "all": "npm run format && npm run build && npm run lint",
