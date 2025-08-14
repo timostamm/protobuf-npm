@@ -73,7 +73,7 @@ npm install --save-dev protobuf-conformance
 npx conformance_test_runner --help 
 ```
 
-### Test protos
+#### Test protos
 
 The protocol for the conformance suite is defined in a Protobuf file, and it uses
 Protobuf files for testing. This package ships all relevant Protobuf files in the
