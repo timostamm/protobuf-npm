@@ -18,7 +18,7 @@
     "@biomejs/biome": "^2.2.0",
     "@types/node": "^24.1.0",
     "esbuild": "^0.25.9",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   },
   "license": "Apache-2.0"
 }
