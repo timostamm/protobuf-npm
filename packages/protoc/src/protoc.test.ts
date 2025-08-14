@@ -30,7 +30,7 @@ function getExpectedVersion() {
   let version = match[1];
   if (version.startsWith("21.")) {
     // All v21.x releases report the version number 3.21.x
-    version = "3." + version;
+    version = `3.${version}`;
   }
   return version;
 }
