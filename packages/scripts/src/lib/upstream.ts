@@ -9,17 +9,24 @@ import {
   readFileSync,
 } from "node:fs";
 
-const minimumSupportedMajor = 26;
+export const minimumSupportedMajorProtoc = 21;
+export const minimumSupportedMajorConformance = 26;
 
 export function filterSupportedUpstreamReleases(
   releases: GithubRelease[],
 ): GithubRelease[] {
   return releases
     .filter((release) => !release.draft)
-    .filter((release) => !release.draft)
     .filter((release) => {
       const version = parseUpstreamVersionFromTag(release.tag_name);
-      return version !== undefined && version.major >= minimumSupportedMajor;
+      return (
+        version !== undefined &&
+        version.major >=
+          Math.min(
+            minimumSupportedMajorProtoc,
+            minimumSupportedMajorConformance,
+          )
+      );
     })
     .filter((release) => protocAssets(release.assets).length > 0);
 }

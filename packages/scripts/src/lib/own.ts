@@ -4,6 +4,8 @@ import type { GithubRelease } from "./github";
 import type { PackageJson } from "./package";
 import {
   filterSupportedUpstreamReleases,
+  minimumSupportedMajorConformance,
+  minimumSupportedMajorProtoc,
   parseUpstreamVersionFromTag,
 } from "./upstream";
 
@@ -116,12 +118,12 @@ export function findOwnMissing(
           version.minor === upstreamVersion.minor &&
           version.prerelease === upstreamVersion.prerelease,
       );
-    const missingProtoc = ownVersions.every(
-      (version) => version.product !== "protoc",
-    );
-    const missingConformance = ownVersions.every(
-      (version) => version.product !== "conformance",
-    );
+    const missingProtoc =
+      ownVersions.every((version) => version.product !== "protoc") &&
+      upstreamVersion.major >= minimumSupportedMajorProtoc;
+    const missingConformance =
+      ownVersions.every((version) => version.product !== "conformance") &&
+      upstreamVersion.major >= minimumSupportedMajorConformance;
     if (!missingProtoc && !missingConformance) {
       continue;
     }
@@ -165,7 +167,7 @@ export function filterSupportedOwnReleases(
     .filter((release) => !release.draft)
     .filter((release) => {
       const version = parseOwnVersionFromTag(release.tag_name);
-      return version !== undefined && version.major >= 26;
+      return version !== undefined;
     });
 }
 
