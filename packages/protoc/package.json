@@ -1,7 +1,7 @@
 {
   "name": "protoc",
-  "version": "24.0.0",
-  "upstreamVersion": "v24.0",
+  "version": "24.1.0",
+  "upstreamVersion": "v24.1",
   "description": "Installs the protocol buffer compiler \"protoc\" for you.",
   "bin": {
     "protoc": "protoc.cjs"
