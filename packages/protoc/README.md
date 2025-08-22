@@ -1,7 +1,7 @@
 protoc
 ======
 
-This package provides the Protobuf compiler `protoc` <!-- inject: release.tag_name -->v31.1<!-- end -->.
+This package provides the Protobuf compiler `protoc` <!-- inject: release.tag_name -->v32.0-rc1<!-- end -->.
 
 ```shell script
 npm install --save-dev protoc
