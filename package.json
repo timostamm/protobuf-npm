@@ -15,7 +15,7 @@
     "packages/scripts"
   ],
   "devDependencies": {
-    "@biomejs/biome": "^2.2.0",
+    "@biomejs/biome": "^2.2.2",
     "@types/node": "^24.2.1",
     "esbuild": "^0.25.9",
     "typescript": "^5.9.2"
