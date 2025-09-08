@@ -6,7 +6,7 @@
     "all": "npm run format && npm run test && npm run build && npm run lint",
     "test": "npm run -ws --if-present test",
     "build": "npm run -ws --if-present build",
-    "lint": "biome lint && npm run -ws --if-present lint",
+    "lint": "biome lint --error-on-warnings && npm run -ws --if-present lint",
     "format": "biome format --write && npm run -ws --if-present format"
   },
   "workspaces": [
