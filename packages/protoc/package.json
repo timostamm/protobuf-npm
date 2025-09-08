@@ -14,7 +14,7 @@
     "build:protoc": "esbuild src/protoc.ts --bundle --platform=node --outfile=protoc.cjs",
     "build:tsc": "tsc --noEmit",
     "test": "tsx --test src/*.test.ts",
-    "lint": "biome lint",
+    "lint": "biome lint --error-on-warnings",
     "format": "biome format --write"
   },
   "type": "commonjs",

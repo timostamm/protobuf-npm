@@ -15,7 +15,7 @@
     "build:conformance_proto_eject": "esbuild src/conformance_proto_eject.ts --bundle --platform=node --outfile=conformance_proto_eject.cjs",
     "build:tsc": "tsc --noEmit",
     "test": "tsx --test src/*.test.ts",
-    "lint": "biome lint",
+    "lint": "biome lint --error-on-warnings",
     "format": "biome format --write"
   },
   "type": "commonjs",
