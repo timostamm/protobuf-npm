@@ -15,9 +15,9 @@
     "packages/scripts"
   ],
   "devDependencies": {
-    "@biomejs/biome": "^2.2.2",
+    "@biomejs/biome": "^2.2.4",
     "@types/node": "^24.3.0",
-    "esbuild": "^0.25.9",
+    "esbuild": "^0.25.10",
     "typescript": "^5.9.2"
   },
   "license": "Apache-2.0"
