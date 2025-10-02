@@ -15,10 +15,10 @@
     "packages/scripts"
   ],
   "devDependencies": {
-    "@biomejs/biome": "^2.2.2",
-    "@types/node": "^24.3.0",
-    "esbuild": "^0.25.9",
-    "typescript": "^5.9.2"
+    "@biomejs/biome": "^2.2.4",
+    "@types/node": "^24.6.2",
+    "esbuild": "^0.25.10",
+    "typescript": "^5.9.3"
   },
   "license": "Apache-2.0"
 }
