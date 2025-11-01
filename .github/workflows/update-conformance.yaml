@@ -35,7 +35,7 @@ jobs:
       - run: |
           cd packages/protobuf-conformance/.tmp
           USE_BAZEL_VERSION=7.1.2 BAZEL_CXXOPTS="-std=c++17" bazel build conformance:conformance_test_runner
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: conformance_test_runner-linux-x64-${{ steps.localversion.outputs.package_version }}
           path: packages/protobuf-conformance/.tmp/bazel-bin/conformance/conformance_test_runner
@@ -61,7 +61,7 @@ jobs:
       - run: |
           cd packages/protobuf-conformance/.tmp
           USE_BAZEL_VERSION=7.1.2 BAZEL_CXXOPTS="-std=c++17" bazel build conformance:conformance_test_runner
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: conformance_test_runner-darwin-x64-${{ steps.localversion.outputs.package_version }}
           path: packages/protobuf-conformance/.tmp/bazel-bin/conformance/conformance_test_runner
