@@ -37,7 +37,7 @@
     "conformance"
   ],
   "devDependencies": {
-    "tsx": "^4.20.6",
+    "tsx": "^4.21.0",
     "fflate": "^0.8.2"
   }
 }
