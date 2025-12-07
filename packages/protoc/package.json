@@ -1,6 +1,6 @@
 {
   "name": "protoc",
-  "version": "33.2.0",
+  "version": "33.2.1",
   "upstreamVersion": "v33.2",
   "description": "Installs the protocol buffer compiler \"protoc\" for you.",
   "bin": {
