@@ -75,14 +75,14 @@ jobs:
           npm ci
           npx update-conformance ${{inputs.version}}
           npx version local conformance --github-output "$GITHUB_OUTPUT"
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
         with:
           name: conformance_test_runner-darwin-x64-${{ steps.localversion.outputs.package_version }}
           path: packages/protobuf-conformance/.tmp
       - run: |
           mv packages/protobuf-conformance/.tmp/conformance_test_runner packages/protobuf-conformance/bin/conformance_test_runner-darwin-x64
           chmod +x packages/protobuf-conformance/bin/conformance_test_runner-darwin-x64
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
         with:
           name: conformance_test_runner-linux-x64-${{ steps.localversion.outputs.package_version }}
           path: packages/protobuf-conformance/.tmp
