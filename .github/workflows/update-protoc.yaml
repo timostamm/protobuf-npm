@@ -26,7 +26,7 @@ jobs:
           npm ci
           npx update-protoc ${{inputs.version}}
           npx version local protoc --github-output "$GITHUB_OUTPUT"
-      - uses: peter-evans/create-pull-request@v7
+      - uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.PROTOBUF_NPM_GITHUB_TOKEN }}
           base: main

@@ -89,7 +89,7 @@ jobs:
       - run: |
           mv packages/protobuf-conformance/.tmp/conformance_test_runner packages/protobuf-conformance/bin/conformance_test_runner-linux-x64
           chmod +x packages/protobuf-conformance/bin/conformance_test_runner-linux-x64
-      - uses: peter-evans/create-pull-request@v7
+      - uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.PROTOBUF_NPM_GITHUB_TOKEN }}
           base: main
