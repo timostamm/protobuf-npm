@@ -3,9 +3,10 @@ on:
   pull_request:
     types: [closed]
     branches: [main]
+permissions:
+  id-token: write  # Required for OIDC, see https://docs.npmjs.com/trusted-publishers
 env:
   GITHUB_TOKEN: ${{ secrets.PROTOBUF_NPM_GITHUB_TOKEN }}
-  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 jobs:
   publish-protoc:
     runs-on: ubuntu-latest
@@ -17,6 +18,8 @@ jobs:
           node-version-file: .nvmrc
           registry-url: 'https://registry.npmjs.org'
       - id: localversion
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_READ_TOKEN }}
         run: |
           npm ci
           npx version local protoc --github-output "$GITHUB_OUTPUT"
@@ -38,6 +41,8 @@ jobs:
           node-version-file: .nvmrc
           registry-url: 'https://registry.npmjs.org'
       - id: localversion
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_READ_TOKEN }}
         run: |
           npm ci
           npx version local conformance --github-output "$GITHUB_OUTPUT"
