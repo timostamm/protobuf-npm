@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version: '24'  # Required for OIDC, see https://docs.npmjs.com/trusted-publishers
           registry-url: 'https://registry.npmjs.org'
       - id: localversion
         env:
@@ -39,7 +39,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version: '24'  # Required for OIDC, see https://docs.npmjs.com/trusted-publishers
           registry-url: 'https://registry.npmjs.org'
       - id: localversion
         env:
