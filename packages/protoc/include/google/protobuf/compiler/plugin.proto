@@ -24,10 +24,10 @@ package google.protobuf.compiler;
 option java_package = "com.google.protobuf.compiler";
 option java_outer_classname = "PluginProtos";
 
+import "google/protobuf/descriptor.proto";
+
 option csharp_namespace = "Google.Protobuf.Compiler";
 option go_package = "google.golang.org/protobuf/types/pluginpb";
-
-import "google/protobuf/descriptor.proto";
 
 // The version number of protocol compiler.
 message Version {
@@ -101,6 +101,18 @@ message CodeGeneratorResponse {
     FEATURE_PROTO3_OPTIONAL = 1;
     FEATURE_SUPPORTS_EDITIONS = 2;
   }
+
+  // The minimum edition this plugin supports.  This will be treated as an
+  // Edition enum, but we want to allow unknown values.  It should be specified
+  // according the edition enum value, *not* the edition number.  Only takes
+  // effect for plugins that have FEATURE_SUPPORTS_EDITIONS set.
+  optional int32 minimum_edition = 3;
+
+  // The maximum edition this plugin supports.  This will be treated as an
+  // Edition enum, but we want to allow unknown values.  It should be specified
+  // according the edition enum value, *not* the edition number.  Only takes
+  // effect for plugins that have FEATURE_SUPPORTS_EDITIONS set.
+  optional int32 maximum_edition = 4;
 
   // Represents a single generated file.
   message File {
