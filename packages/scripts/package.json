@@ -15,7 +15,7 @@
   },
   "type": "commonjs",
   "devDependencies": {
-    "tsx": "^4.21.0",
+    "tsx": "^4.22.4",
     "fflate": "^0.8.3"
   }
 }
