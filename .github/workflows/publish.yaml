@@ -13,7 +13,7 @@ jobs:
     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'update-protoc-')
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'  # Required for OIDC, see https://docs.npmjs.com/trusted-publishers
           registry-url: 'https://registry.npmjs.org'
@@ -36,7 +36,7 @@ jobs:
     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'update-conformance-')
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'  # Required for OIDC, see https://docs.npmjs.com/trusted-publishers
           registry-url: 'https://registry.npmjs.org'
