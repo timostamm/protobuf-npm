@@ -59,6 +59,27 @@ export function parseUpstreamVersionFromTag(
   };
 }
 
+/**
+ * Bazel version to build the given upstream release with. We only build the
+ * conformance test runner, protoc comes as a prebuilt release asset.
+ * Upstream raises the requirements over time, so older releases need older
+ * Bazel versions.
+ */
+export function bazelVersionForUpstream(tag_name: string): string {
+  const version = parseUpstreamVersionFromTag(tag_name);
+  if (version === undefined) {
+    throw new Error(`Unable to parse upstream version ${tag_name}`);
+  }
+  // v37 uses flag_alias() in MODULE.bazel, which Bazel 8.0 does not support.
+  if (version.major >= 37) {
+    return "8.7.0";
+  }
+  if (version.major >= 34) {
+    return "8.0.1";
+  }
+  return "7.1.2";
+}
+
 export type ProtocAsset = {
   name: string; // e.g. protoc-31.1-linux-aarch_64.zip
   /**
