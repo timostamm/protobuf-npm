@@ -4,7 +4,8 @@
     "target": "ES2017",
     "strict": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "types": ["node"],
     "lib": ["es2017", "dom"]
   }
 }
