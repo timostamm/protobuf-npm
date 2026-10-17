@@ -7,7 +7,7 @@ import {
   findOwnMissing,
   findRootDir,
 } from "./lib/own";
-import { listGithubReleases } from "./lib/github";
+import { fetchGithubRelease, listGithubReleases } from "./lib/github";
 import {
   bazelVersionForUpstream,
   filterSupportedUpstreamReleases,
@@ -23,6 +23,8 @@ version.ts local protoc|conformance [--github-output "$GITHUB_OUTPUT"]
   - package_dist_tag: npm dist-tag for the local package version. E.g. "latest" for 29.2.1, and "next" for 30.2.1-rc.1. 
   - package_is_prerelease: Whether  the package_version is a prerelease version.
   - package_upstream_version: Upstream version of the local package.
+  - latest_upstream_version: Latest upstream release, as marked "Latest" on GitHub.
+  - package_upstream_is_latest: "1" if package_upstream_version equals latest_upstream_version.
   - bazel_version: Bazel version to build the upstream release with.
 
 version.ts missing [--github-output "$GITHUB_OUTPUT"]
@@ -155,6 +157,11 @@ async function local(args: string[]): Promise<void> {
     console.error(usage);
     process.exit(1);
   }
+  const latestUpstreamRelease = await fetchGithubRelease(
+    "protocolbuffers",
+    "protobuf",
+    "latest",
+  );
   const packageVersionPrerelease = pkg.version.match(
     /^\d+\.\d+\.\d+(-.+)?$/,
   )?.[1];
@@ -164,6 +171,8 @@ async function local(args: string[]): Promise<void> {
     package_dist_tag: packageVersionPrerelease !== undefined ? "next" : "latest",
     package_is_prerelease: packageVersionPrerelease !== undefined ? "1" : "",
     package_upstream_version: pkg.upstreamVersion,
+    latest_upstream_version: latestUpstreamRelease.tag_name,
+    package_upstream_is_latest: latestUpstreamRelease.tag_name === pkg.upstreamVersion ? "1" : "",
     bazel_version: bazelVersionForUpstream(pkg.upstreamVersion),
   });
 }
