@@ -8,7 +8,10 @@ import {
   findRootDir,
 } from "./lib/own";
 import { listGithubReleases } from "./lib/github";
-import { filterSupportedUpstreamReleases } from "./lib/upstream";
+import {
+  bazelVersionForUpstream,
+  filterSupportedUpstreamReleases,
+} from "./lib/upstream";
 import { appendFileSync } from "node:fs";
 
 const usage = `USAGE: 
@@ -20,6 +23,7 @@ version.ts local protoc|conformance [--github-output "$GITHUB_OUTPUT"]
   - package_dist_tag: npm dist-tag for the local package version. E.g. "latest" for 29.2.1, and "next" for 30.2.1-rc.1. 
   - package_is_prerelease: Whether  the package_version is a prerelease version.
   - package_upstream_version: Upstream version of the local package.
+  - bazel_version: Bazel version to build the upstream release with.
 
 version.ts missing [--github-output "$GITHUB_OUTPUT"]
 
@@ -160,6 +164,7 @@ async function local(args: string[]): Promise<void> {
     package_dist_tag: packageVersionPrerelease !== undefined ? "next" : "latest",
     package_is_prerelease: packageVersionPrerelease !== undefined ? "1" : "",
     package_upstream_version: pkg.upstreamVersion,
+    bazel_version: bazelVersionForUpstream(pkg.upstreamVersion),
   });
 }
 
